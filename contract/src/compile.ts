@@ -1,11 +1,11 @@
-const path = require('path');
-const fs = require('fs');
+import path from 'path';
+import fs from 'fs';
 const solc = require('solc');
 
 const contractPath = path.resolve(__dirname, 'Contract.sol');
-const source = fs.readFileSync(contractPath, 'UTF-8');
+const source = fs.readFileSync(contractPath, 'utf8');
 
-export const compiled = solc.compile(
+const compiled = solc.compile(
   JSON.stringify({
     language: 'Solidity',
     sources: {
@@ -22,3 +22,7 @@ export const compiled = solc.compile(
     },
   })
 );
+
+fs.writeFile('Contract.json', compiled, function (err) {
+  if (err) throw err;
+});
