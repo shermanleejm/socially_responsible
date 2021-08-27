@@ -4,6 +4,7 @@ import { AddFinancials } from './AddFinancials';
 import TrendingUpIcon from '@material-ui/icons/TrendingUp';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import AddBoxIcon from '@material-ui/icons/AddBox';
+import HomeIcon from '@material-ui/icons/Home';
 
 export const pages = [
   {
@@ -23,5 +24,11 @@ export const pages = [
     icon: <AddBoxIcon />,
     link: '/add',
     component: <AddFinancials />,
+  },
+  {
+    title: 'Landing Page',
+    icon: <HomeIcon />,
+    link: '/home',
+    component: <LandingPage />,
   },
 ];

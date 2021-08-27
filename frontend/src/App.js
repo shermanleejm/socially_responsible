@@ -3,7 +3,8 @@ import { BrowserRouter, Route, Switch, Link } from 'react-router-dom';
 import Dashboard from './components/Dashboard.js';
 
 import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
-import { pages, SideBar } from './components/SideBar';
+import { SideBar } from './components/SideBar';
+import { pages } from './components/Pages';
 
 const theme = createTheme({
   palette: {
@@ -31,15 +32,9 @@ function App() {
         <SideBar />
         <BrowserRouter>
           <Switch>
-            <Route path="/dashboard">
-              <Dashboard />
-            </Route>
-
-            <Route path="/">
-              
-            </Route>
-
-
+            {pages.map((page) => {
+              return <Route path={page.Link}>{page.component}</Route>;
+            })}
           </Switch>
         </BrowserRouter>
       </MuiThemeProvider>
