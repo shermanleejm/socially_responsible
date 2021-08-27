@@ -28,7 +28,7 @@ export const pages = [
   {
     title: 'Landing Page',
     icon: <HomeIcon />,
-    link: '/home',
+    link: '/',
     component: <LandingPage />,
   },
 ];
