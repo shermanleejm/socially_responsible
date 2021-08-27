@@ -17,7 +17,6 @@ api = Api(
 CORS(app)
 app.wsgi_app = ProxyFix(app.wsgi_app)
 
-
 load_dotenv()
 
 calc_credit_parser = api.parser()
