@@ -74,7 +74,7 @@ export const AddFinancials = () => {
             />
           </Grid>
           <Grid item>
-            <Button variant="contained" color="secondary">
+            <Button variant="contained" color="primary" style={{ color: 'white' }}>
               Submit Expense
             </Button>
           </Grid>
@@ -110,7 +110,7 @@ export const AddFinancials = () => {
             />
           </Grid>
           <Grid item>
-            <Button variant="contained" color="primary">
+            <Button variant="contained" color="primary" style={{ color: 'white' }}>
               Submit Revenue
             </Button>
           </Grid>
