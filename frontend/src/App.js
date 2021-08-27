@@ -26,8 +26,8 @@ function App() {
   return (
     <div className="App">
       <MuiThemeProvider theme={theme}>
-        <SideBar />
         <BrowserRouter>
+          <SideBar />
           <Switch>
             {pages.map((page) => {
               return <Route path={page.link}>{page.component}</Route>;

@@ -9,8 +9,12 @@ import {
   Typography,
   CssBaseline,
   Drawer,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
 
 export function SideBar() {
   const classes = useStyles();
-  const [open, setOpen] = React.useState();
+  const [open, setOpen] = React.useState(false);
   console.log(pages);
   return (
     <div>
@@ -34,7 +38,23 @@ export function SideBar() {
           </IconButton>
         </Toolbar>
       </AppBar>
-      <Drawer variant="temporary" open={open}></Drawer>
+      <Drawer variant="temporary" open={open}>
+        <div>
+          {pages.map((page) => {
+            return (
+              <ListItem
+                button
+                component={Link}
+                to={page.link}
+                onClick={() => setOpen(false)}
+              >
+                <ListItemIcon>{page.icon}</ListItemIcon>
+                <ListItemText primary={page.title} />
+              </ListItem>
+            );
+          })}
+        </div>
+      </Drawer>
     </div>
   );
 }

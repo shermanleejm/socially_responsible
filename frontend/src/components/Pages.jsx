@@ -5,13 +5,14 @@ import TrendingUpIcon from '@material-ui/icons/TrendingUp';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import HomeIcon from '@material-ui/icons/Home';
+import { Leaderboard } from './Leaderboard';
 
 export const pages = [
   {
     title: 'Leaderboard',
     icon: <TrendingUpIcon />,
     link: '/leaderboard',
-    component: <LandingPage />,
+    component: <Leaderboard />,
   },
   {
     title: 'Dashboard',
