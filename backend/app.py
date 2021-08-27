@@ -38,6 +38,22 @@ class CalculateCreditRisk(Resource):
         return company, 200
 
 
+add_expense_parser = api.parser()
+add_expense_parser.add_argument("amount", help="How much the expense was.")
+add_expense_parser.add_argument("title", help="Name of expense.")
+
+
+@api.route("/add-expense")
+@api.doc(description="Add a new expense")
+class AddExpanse(Resource):
+    @api.expect(add_expense_parser)
+    def get(self):
+        amount = calc_credit_parser.parse_args().get("amount")
+        title = calc_credit_parser.parse_args().get("title")
+        # add to db
+        return "success", 200
+
+
 def addTransaction():
     pass
 
