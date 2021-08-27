@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     background: 'transparent',
     boxShadow: 'none',
-    zIndex: 2,
+    zIndex: theme.zIndex.drawer + 1,
   },
 }));
 
@@ -32,13 +32,17 @@ export function SideBar() {
     <div>
       <CssBaseline />
       <AppBar position="fixed" className={classes.root}>
-        <Toolbar>
+        <Toolbar variant="dense">
           <IconButton edge="start" onClick={() => setOpen(!open)}>
             <MenuIcon />
           </IconButton>
         </Toolbar>
       </AppBar>
-      <Drawer variant="temporary" open={open}>
+      <Drawer
+        variant="temporary"
+        open={open}
+        ModalProps={{ onBackdropClick: () => setOpen(false) }}
+      >
         <div>
           {pages.map((page) => {
             return (

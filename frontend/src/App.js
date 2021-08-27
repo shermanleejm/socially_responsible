@@ -28,11 +28,13 @@ function App() {
       <MuiThemeProvider theme={theme}>
         <BrowserRouter>
           <SideBar />
-          <Switch>
-            {pages.map((page) => {
-              return <Route path={page.link}>{page.component}</Route>;
-            })}
-          </Switch>
+          <div style={{ marginTop: '30px' }}>
+            <Switch>
+              {pages.map((page) => {
+                return <Route path={page.link}>{page.component}</Route>;
+              })}
+            </Switch>
+          </div>
         </BrowserRouter>
       </MuiThemeProvider>
     </div>

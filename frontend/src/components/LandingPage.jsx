@@ -1,11 +1,21 @@
 import React from 'react';
 import logo from '../images/logo.svg';
-import { Container, Button, Grid } from '@material-ui/core';
+import { Container, Button, Grid, makeStyles } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 
+const useStyles = makeStyles((theme) => {
+  return {
+    root: {
+      marginTop: '100px',
+      textAlign: 'center',
+    },
+  };
+});
+
 export const LandingPage = () => {
+  const classes = useStyles();
   return (
-    <div className="App-header">
+    <div className={classes.root}>
       <img src={logo} alt="logo" height="300px" />
 
       <Container style={{ 'padding-top': '0px' }}>
