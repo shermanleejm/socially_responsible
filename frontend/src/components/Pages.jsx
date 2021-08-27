@@ -1,6 +1,6 @@
 import Dashboard from './Dashboard';
 import { LandingPage } from './LandingPage';
-import { AddFinancials } from './AddFinancials';
+import { AddFinancials } from './AddFinancials/AddFinancials';
 import TrendingUpIcon from '@material-ui/icons/TrendingUp';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import AddBoxIcon from '@material-ui/icons/AddBox';

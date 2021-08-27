@@ -1,7 +1,7 @@
 import React from 'react';
 import NumberFormat from 'react-number-format';
-import { TextField } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import { makeStyles, TextField } from '@material-ui/core';
 
 function NumberFormatCustom(props) {
   const { inputRef, onChange, ...other } = props;
@@ -31,23 +31,33 @@ NumberFormatCustom.propTypes = {
   onChange: PropTypes.func.isRequired,
 };
 
-export const AddFinancials = () => {
-  const [values, setValues] = React.useState();
+const useStyles = makeStyles((theme) => {
+  return {
+    textfield: {
+      width: '80vw',
+    },
+  };
+});
 
+const AmountField = (props) => {
+  const classes = useStyles();
   return (
     <div>
       <TextField
-        label="react-number-format"
-        value={values}
+        label={props.title}
+        value={props.values}
         onChange={(event) => {
-          setValues(event.target.value);
+          props.callback(event.target.value, props.keyName);
         }}
-        name="numberformat"
-        id="formatted-numberformat-input"
         InputProps={{
           inputComponent: NumberFormatCustom,
         }}
+        variant="outlined"
+        color="secondary"
+        className={classes.textfield}
       />
     </div>
   );
 };
+
+export default AmountField;
