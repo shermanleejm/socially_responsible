@@ -1,22 +1,10 @@
 from flask import Flask, jsonify, request, Response, url_for
 from flask_cors import CORS
 from flask_restplus import Api, Resource, fields
-from werkzeug.datastructures import FileStorage
 from dotenv import load_dotenv
-import os
 import pymysql.cursors
 import json
-from nltk.corpus import wordnet
-import pandas as pd
-import numpy as np
-import sys
-from datetime import datetime, timedelta, date
-from dateutil.relativedelta import relativedelta
-import tempfile
-import shutil
-from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from werkzeug.middleware.proxy_fix import ProxyFix
-import decimal
 
 
 app = Flask(__name__)
