@@ -22,3 +22,11 @@ CREATE TABLE IF NOT EXISTS `revenue` (
     `uen` VARCHAR(256),
     `timestamp` DATE NOT NULL
 );
+CREATE TABLE IF NOT EXISTS `loan` (
+    `loan_id` INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `date` DATE NOT NULL,
+    `provider` VARCHAR(256) NOT NULL,
+    `amount` DOUBLE NOT NULL,
+    `uen` VARCHAR(256),
+    `status` VARCHAR(256) NOT NULL
+);
