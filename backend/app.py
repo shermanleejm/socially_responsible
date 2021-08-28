@@ -58,15 +58,19 @@ class Companies(db.Model):
 
     uen = db.Column(db.String(256), primary_key=True)
     name = db.Column(db.String(256), nullable=False)
+    hashed_password = db.Column(db.String(1000),nullable=False)
+    salt = db.Column(db.String(1000),nullable=False)
     credit_score = db.Column(db.Float(precision=2), nullable=False)
 
-    def __init__(self, uen, name, credit_score):
+    def __init__(self, uen, name, hashed_password, salt, credit_score):
         self.uen = uen
         self.name = name
+        self.hashed_password = hashed_password
+        self.salt = salt
         self.credit_score = credit_score
 
     def json(self):
-        return {"uen": self.uen, "name": self.name, "credit_score": self.credit_score}
+        return {"uen": self.uen, "name": self.name, "hashed_password":self.hashed_password,"salt":self.salth, "credit_score": self.credit_score}
 
 
 ################## Expenditure Class Creation ##################
@@ -393,7 +397,156 @@ class newLoan(Resource):
             except:
                 return "Unexpected error, please contact admin",400
 
-                
+
+companies_registration_parser = api.parser()
+companies_registration_parser.add_argument("uen", help="Company UEN")
+companies_registration_parser.add_argument("name", help="Name of company")
+companies_registration_parser.add_argument("password", help="Password")
+companies_registration_parser.add_argument("home_ownership", help="Paying, Own Home, Rent")
+companies_registration_parser.add_argument("annual_income", help="Annual income")
+companies_registration_parser.add_argument("years_in_current_job", help="Years in current job")
+companies_registration_parser.add_argument("tax_liens",help="Tax liens")
+companies_registration_parser.add_argument("number_of_open_accounts",help="Number of open accounts")
+companies_registration_parser.add_argument("years_of_credit_history", help="Years of credit history")
+companies_registration_parser.add_argument("maximum_open_credit", help="Maximum open credit")
+companies_registration_parser.add_argument("months_since_last_delinquent", help="Months since last delinquent")
+companies_registration_parser.add_argument("bankruptcies", help="Number of bankruptcies")
+companies_registration_parser.add_argument("current_loan_amount", help="Current loan amounts")
+companies_registration_parser.add_argument("current_credit_balance", help="Current credit balance")
+companies_registration_parser.add_argument("monthly_debt", help="Monthly debt")
+@api.route("/companies_register")
+@api.doc(description="Registration for companies")
+class CompaniesRegistration(Resource):
+    @api.expect(companies_registration_parser)
+    def get(self):
+        uen = companies_registration_parser.parse_args().get("uen")
+        name = companies_registration_parser.parse_args().get("name")
+        password = companies_registration_parser.parse_args().get("password")
+        acc = Companies.query.filter_by(uen=uen).count()
+        # print(uen)
+        # print(password)
+        # print(acc)
+        if acc > 0:
+            exists=True
+        else:
+            exists=False
+        if exists:
+            return 400, "username already exists"
+        else:
+            #Credit risk calculation
+            # print(companies_registration_parser.parse_args().get("home_ownership"))
+            details = {
+                "home_ownership": companies_registration_parser.parse_args().get("home_ownership"),
+                "annual_income": float(companies_registration_parser.parse_args().get("annual_income")),
+                "years_in_current_job": float(companies_registration_parser.parse_args().get("years_in_current_job")),
+                "tax_liens": float(companies_registration_parser.parse_args().get("tax_liens")),
+                "number_of_open_accounts": float(companies_registration_parser.parse_args().get("number_of_open_accounts")),
+                "years_of_credit_history": float(companies_registration_parser.parse_args().get("years_of_credit_history")),
+                "maximum_open_credit": float(companies_registration_parser.parse_args().get("maximum_open_credit")),
+                "number_of_credit_problems":float(0),
+                "months_since_last_delinquent": float(companies_registration_parser.parse_args().get("months_since_last_delinquent")),
+                "bankruptcies": float(companies_registration_parser.parse_args().get("bankruptcies")),
+                "term": "Short Term",
+                "current_loan_amount": float(companies_registration_parser.parse_args().get("current_loan_amount")),
+                "current_credit_balance": float(companies_registration_parser.parse_args().get("current_credit_balance")),
+                "monthly_debt": float(companies_registration_parser.parse_args().get("monthly_debt")),
+            }
+            years_dict = {
+                "-1": -1,
+                float(11): 10,
+                float(9): 8,
+                float(7): 6,
+                float(8): 7,
+                float(6): 5,
+                float(2): 1,
+                float(1): 0,
+                float(5): 4,
+                float(4): 3,
+                float(3): 2,
+                float(10): 9,
+            }
+            details["years_in_current_job"] = years_dict[details["years_in_current_job"]]
+            housing_dict = {"Rent": 0, "Paying": 1, "Own Home": 2}
+            details["home_ownership"] = housing_dict[details["home_ownership"]]
+            term_dict = {"Short Term": 0, "Long Term": 1}
+            details["term"] = term_dict[details["term"]]
+            numeric_feats = [
+                "annual_income",
+                "tax_liens",
+                "number_of_open_accounts",
+                "years_of_credit_history",
+                "maximum_open_credit",
+                "months_since_last_delinquent",
+                "bankruptcies",
+                "current_loan_amount",
+                "current_credit_balance",
+                "monthly_debt",
+            ]
+            # call on standard scaler object from pickle
+            numeric_details = {}
+            cat_details = {}
+            for x in details:
+                if x in numeric_feats:
+                    numeric_details[x] = details[x]
+                else:
+                    cat_details[x] = details[x]
+            numeric_df = pd.DataFrame(numeric_details, index=[0])
+            preprocessing_func = pickle.load(open("preprocessing.pickle", "rb"))
+            numeric_df = pd.DataFrame(
+                preprocessing_func.transform(numeric_df),
+                index=numeric_df.index,
+                columns=numeric_feats,
+            )
+            cat_df = pd.DataFrame(cat_details, index=[0])
+            overall_df = pd.concat([cat_df, numeric_df], axis=1)
+            # Run model
+            catboost_clf = pickle.load(open("catboost_clf.pickle", "rb"))
+            y_pred = catboost_clf.predict_proba(overall_df)
+            risk = y_pred[0][1] * 10
+            credit_score = risk
+            salt = uuid.uuid4().hex
+            hashed_password= hashlib.sha512((password + salt).encode('utf-8')).hexdigest()
+            print(uen)
+            print(name)
+            print(hashed_password)
+            print(salt)
+            print("==========risk========")
+            print(risk)
+            companies = Companies(str(uen),str(name),str(hashed_password),str(salt),round(float(credit_score),2))
+            try:
+                db.session.add(companies)
+                db.session.commit()
+                return 200, "Success"
+            except:
+                return 400,"Unexpected error in registration"
+
+
+companies_login_parser = api.parser()
+companies_login_parser.add_argument("uen", help="UEN of company")
+companies_login_parser.add_argument("password", help="Password")
+@api.route("/companies_login")
+@api.doc(description="Login for companies")
+class CompaniesLogin(Resource):
+    @api.expect(companies_login_parser)
+    def get(self):
+        uen = companies_login_parser.parse_args().get("uen")
+        password = companies_login_parser.parse_args().get("password")
+        acc = Companies.query.filter_by(uen=uen).count()
+        if acc > 0:
+            exists=True
+        else:
+            exists=False
+        if exists==False:
+            return 400, "UEN does not exist"
+        else:
+            hashed_db_password = Companies.query.filter_by(uen=uen).first().hashed_password
+            db_salt = Companies.query.filter_by(uen=uen).first().salt
+            hashed_password = hashlib.sha512((password + db_salt).encode('utf-8')).hexdigest()
+            if hashed_password==hashed_db_password:
+                return 200, "Login successful"
+            else:
+                return 400, "Incorrect password"
+
 
 investor_registration_parser = api.parser()
 investor_registration_parser.add_argument("username", help="Username")
@@ -450,12 +603,6 @@ class InvestorLogin(Resource):
                 return 200, "Login successful"
             else:
                 return 400, "Incorrect password"
-            # try:
-            #     db.session.add(investors)
-            #     db.session.commit()
-            #     return 200, "Success"
-            # except:
-            #     return 400,"Unexpected error in registration"
 
 def checkLoanStatus():
     pass
