@@ -21,7 +21,7 @@ export const LandingPage = () => {
       <Container style={{ 'padding-top': '0px' }}>
         <h1>Welcome to Edison!</h1>
         <p>
-          We primarily primarily connects banks and SME owners to provide microfinancing
+          We primarily connect banks and SME owners to provide microfinancing
           opportunities, allowing banks to loan SMEs.
         </p>
         <Grid container direction="row" justify="center" alignItems="center" spacing={4}>
