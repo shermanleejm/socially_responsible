@@ -338,7 +338,7 @@ def checkLoanStatus():
 @api.doc(description="Return list of supporting banks for loans")
 class GetBanks(Resource):
     def get(self):
-        return ["DBS", "OCBC", "Bank of America", "UOB", "JP Morgan", "Soldman Gachs"]
+        return ["BDS", "cbc", "BofA", "obu", "JMorgan", "SoldmanGachs"]
 
 
 if __name__ == "__main__":

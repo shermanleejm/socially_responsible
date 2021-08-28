@@ -5,6 +5,8 @@ import TrendingUpIcon from '@material-ui/icons/TrendingUp';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import HomeIcon from '@material-ui/icons/Home';
+import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
+import LoanManagement from './LoanMangement/LoanManagement';
 import { Leaderboard } from './Leaderboard';
 
 export const pages = [
@@ -25,6 +27,12 @@ export const pages = [
     icon: <AddBoxIcon />,
     link: '/add',
     component: <AddFinancials />,
+  },
+  {
+    title: 'Loan Management',
+    icon: <MonetizationOnIcon />,
+    link: '/loan-management',
+    component: <LoanManagement />,
   },
   {
     title: 'Landing Page',
