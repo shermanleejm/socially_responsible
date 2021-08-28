@@ -5,7 +5,8 @@ USE socially_responsible;
 CREATE TABLE IF NOT EXISTS `companies` (
     `uen` VARCHAR(256) NOT NULL PRIMARY KEY,
     `name` VARCHAR(256) NOT NULL,
-    `password` VARCHAR(256) NOT NULL,
+    `hashed_password` VARCHAR(256) NOT NULL,
+    `salt` VARCHAR(1000) NOT NULL,
     `credit_score` DOUBLE
 );
 CREATE TABLE IF NOT EXISTS `expenditure` (
