@@ -88,10 +88,10 @@ const LoanManagement = () => {
 
   // TODO: take the following from localstorage
   const [uen] = React.useState('198401412');
-  // const [isCompany] = React.useState(true);
-  // const [name] = React.useState('Rick Grimes Pte Ltd');
-  const [isCompany] = React.useState(false);
-  const [name] = React.useState('BDS');
+  const [isCompany] = React.useState(true);
+  const [name] = React.useState('Rick Grimes Pte Ltd');
+  // const [isCompany] = React.useState(false);
+  // const [name] = React.useState('BDS');
 
   React.useEffect(async () => {
     const fetchBanks = async () => {
