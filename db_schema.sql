@@ -5,6 +5,7 @@ USE socially_responsible;
 CREATE TABLE IF NOT EXISTS `companies` (
     `uen` VARCHAR(256) NOT NULL PRIMARY KEY,
     `name` VARCHAR(256) NOT NULL,
+    `password` VARCHAR(256) NOT NULL,
     `credit_score` DOUBLE
 );
 CREATE TABLE IF NOT EXISTS `expenditure` (
@@ -19,5 +20,5 @@ CREATE TABLE IF NOT EXISTS `revenue` (
     `amount` DOUBLE NOT NULL,
     `name` VARCHAR(1000) NOT NULL,
     `uen` VARCHAR(256),
-    `timestamp` DATE NOT NULL,
+    `timestamp` DATE NOT NULL
 );
