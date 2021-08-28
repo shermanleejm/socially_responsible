@@ -5,6 +5,9 @@ from dotenv import load_dotenv
 import pymysql.cursors
 import json
 from werkzeug.middleware.proxy_fix import ProxyFix
+import sng
+import random
+import string
 
 
 app = Flask(__name__)
@@ -52,6 +55,26 @@ class AddExpanse(Resource):
         title = calc_credit_parser.parse_args().get("title")
         # add to db
         return "success", 200
+
+
+@api.route("/leaderboard")
+@api.doc(description="Get latest leaderboard rankings")
+class Leaderboard(Resource):
+    def get(self):
+        gen = sng.Generator.load("leaderboard_model")
+        gen.config.suffix = " Pte Ltd"
+        res = []
+        for name in gen.simulate(n=10):
+            res.append(
+                {
+                    "company": name,
+                    "uen": "".join(random.choices(string.digits, k=14)),
+                    "credit": round(random.uniform(0, 5), 1),
+                    "financial": round(random.uniform(0, 5), 1),
+                    "esg": round(random.uniform(0, 5), 1),
+                }
+            )
+        return res
 
 
 def addTransaction():

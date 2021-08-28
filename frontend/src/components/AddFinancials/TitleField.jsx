@@ -11,13 +11,14 @@ const useStyles = makeStyles((theme) => {
 
 const ExpenseField = (props) => {
   const classes = useStyles();
+  const { values, callback, ...rest } = props;
   return (
     <div>
       <TextField
         label="Title"
-        value={props.values}
+        value={values}
         onChange={(event) => {
-          props.callback(event.target.value);
+          callback(event.target.value);
         }}
         variant="outlined"
         color="secondary"

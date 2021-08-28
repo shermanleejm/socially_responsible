@@ -4,6 +4,7 @@ import Dashboard from './components/Dashboard.js';
 import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
 import { SideBar } from './components/SideBar';
 import { pages } from './components/Pages';
+require('dotenv').config();
 
 const theme = createTheme({
   palette: {
