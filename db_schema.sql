@@ -15,10 +15,9 @@ CREATE TABLE IF NOT EXISTS `expenditure` (
     `timestamp` TIMESTAMP NOT NULL
 );
 CREATE TABLE IF NOT EXISTS `revenue` (
-    `id` INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `revenue_id` INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
     `amount` DOUBLE NOT NULL,
     `name` VARCHAR(1000) NOT NULL,
     `uen` VARCHAR(256),
     `timestamp` TIMESTAMP NOT NULL,
-    FOREIGN KEY (`uen`) REFERENCES companies(`uen`)
 );

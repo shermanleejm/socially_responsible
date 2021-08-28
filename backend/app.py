@@ -83,7 +83,24 @@ class Expenditure(db.Model):
     def json(self):
         return {"amount": self.amount, "name": self.name , "uen": self.uen , "timestamp": self.timestamp}
 
+################## Revenue Class Creation ##################
+class Revenue(db.Model):
+    __tablename__ = 'revenue'
 
+    revenue_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    amount = db.Column(db.Float(precision=2), nullable=False)
+    name = db.Column(db.String(1000), nullable=False)
+    uen = db.Column(db.String(256), nullable=True)
+    timestamp = db.Column(db.DateTime, nullable=False)
+
+    def __init__(self, amount, name, uen, timestamp):
+        self.amount = amount
+        self.name = name
+        self.uen = uen
+        self.timestamp = timestamp
+
+    def json(self):
+        return {"amount": self.amount, "name": self.name , "uen": self.uen , "timestamp": self.timestamp}
 
 
 #==================== Connected to database ====================#
@@ -163,8 +180,31 @@ class AddExpense(Resource):
             return "success", 200
         except:
             print("Failed")
-            return "success", 200
+            return "Failed", 400
 
+
+add_revenue_parser = api.parser()
+add_revenue_parser.add_argument("amount", help="How much the revenue was.")
+add_revenue_parser.add_argument("name", help="Name or short description of expense.")
+add_revenue_parser.add_argument("uen", help="uen of the company")
+add_revenue_parser.add_argument("timestamp", help="Date and time of when the expense was made")
+@api.route("/add-revenue")
+@api.doc(description="Add a new transaction")
+class AddRevenue(Resource):
+    @api.expect(add_revenue_parser)
+    def get(self):
+        amount = add_revenue_parser.parse_args().get("amount")
+        name = add_revenue_parser.parse_args().get("name")
+        uen = add_revenue_parser.parse_args().get("uen")
+        timestamp = add_revenue_parser.parse_args().get("timestamp")
+        revenue = Revenue(float(amount),name,uen,timestamp)
+        try:
+            db.session.add(revenue)
+            db.session.commit()
+            return "success", 200
+        except:
+            print("Failed")
+            return "Failed", 400
 
 @api.route("/leaderboard")
 @api.doc(description="Get latest leaderboard rankings")
@@ -186,19 +226,10 @@ class Leaderboard(Resource):
         return res
 
 
-def addTransaction():
-    pass
-
-
-def addRevenue():
-    pass
-
-
 def login():
     pass
 
 
-## Fields: UEN, sector, name
 def register():
     pass
 
