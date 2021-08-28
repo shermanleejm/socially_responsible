@@ -118,6 +118,32 @@ class Revenue(db.Model):
             "timestamp": self.timestamp,
         }
 
+################## Loan Class Creation ##################
+class Loan(db.Model):
+    __tablename__ = "loan"
+
+    loan_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    date = db.Column(db.Date, nullable=False)
+    provider = db.Column(db.String(256), nullable=False) 
+    amount = db.Column(db.Float(precision=2), nullable=False)
+    uen = db.Column(db.String(256), nullable=True)
+    status = db.Column(db.String(256), nullable=False) 
+
+    def __init__(self, date, provider, amount, uen, status):
+        self.date = date
+        self.provider = provider
+        self.amount = amount
+        self.uen = uen
+        self.status = status
+
+    def json(self):
+        return {
+            "date": self.date,
+            "provider": self.provider,
+            "amount": self.amount,
+            "uen": self.uen,
+            "status": self.status,
+        }
 
 # ==================== Connected to database ====================#
 
@@ -319,6 +345,35 @@ class Leaderboard(Resource):
             )
         return res
 
+new_loan_parser = api.parser()
+new_loan_parser.add_argument("amount",help="Amount requested")
+new_loan_parser.add_argument("bank",help="Which bank loan is requested from")
+new_loan_parser.add_argument("uen",help="uen of company")
+@api.route("/new_loan")
+@api.doc(description="Request loan from bank")
+class newLoan(Resource):
+    @api.expect(new_loan_parser)
+    def get(self):
+        amount = new_loan_parser.parse_args().get("amount")
+        bank = new_loan_parser.parse_args().get("bank")
+        uen = new_loan_parser.parse_args().get("uen")
+        global banks
+        #["BDS", "cbc", "BofA", "obu", "JMorgan", "SoldmanGachs"]
+        if bank not in banks:
+            return "Bank entered not in list of supporting banks", 400
+        else:
+            status = "pending"
+            date = datetime.today().strftime('%Y-%m-%d')
+            loan = Loan(date, bank, float(amount), uen, status)
+            try:
+                db.session.add(loan)
+                db.session.commit()
+                return "Success",200
+            except:
+                return "Unexpected error, please contact admin",400
+
+                
+
 
 def login():
     pass
@@ -328,8 +383,7 @@ def register():
     pass
 
 
-def newLoan():
-    pass
+
 
 
 def checkLoanStatus():
