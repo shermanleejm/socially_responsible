@@ -16,6 +16,7 @@ from mysql.connector import errorcode
 from dateutil import parser
 import hashlib, uuid
 from datetime import datetime
+
 app = Flask(__name__)
 api = Api(
     app,
@@ -255,6 +256,8 @@ class AddRevenue(Resource):
 
 get_revenue_parser = api.parser()
 get_revenue_parser.add_argument("uen", help="UEN of company to retrieve revenue of.")
+
+
 @api.route("/get-revenue")
 @api.doc(description="Get revenue of a particular company")
 class GetRevenue(Resource):
@@ -263,7 +266,10 @@ class GetRevenue(Resource):
         uen = add_revenue_parser.parse_args().get("uen")
         revenue_info = {}
         for exp in Revenue.query.filter_by(uen=uen):
-            revenue_info[exp.json()["timestamp"].strftime("%m/%d/%Y, %H:%M:%S")] = {"name":exp.json()["name"],"amount":exp.json()["amount"]} 
+            revenue_info[exp.json()["timestamp"].strftime("%m/%d/%Y, %H:%M:%S")] = {
+                "name": exp.json()["name"],
+                "amount": exp.json()["amount"],
+            }
         return revenue_info
         # try:
         #     print("test")
@@ -306,8 +312,6 @@ class Leaderboard(Resource):
         return res
 
 
-
-
 def login():
     pass
 
@@ -322,6 +326,13 @@ def newLoan():
 
 def checkLoanStatus():
     pass
+
+
+@api.route("/get-banks")
+@api.doc(description="Return list of supporting banks for loans")
+class GetBanks(Resource):
+    def get(self):
+        return ["DBS", "OCBC", "Bank of America", "UOB", "JP Morgan", "Soldman Gachs"]
 
 
 if __name__ == "__main__":

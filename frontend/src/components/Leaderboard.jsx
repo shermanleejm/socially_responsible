@@ -21,11 +21,11 @@ const useStyles = makeStyles((theme) => {
       justifyContent: 'center',
     },
     leaderboardrow: {
-      backgroundColor: theme.palette.primary.main,
       marginTop: '5px',
       padding: '10px',
       color: theme.palette.secondary.main,
       paddingRight: '40px',
+      backgroundColor: theme.palette.primary.main2,
     },
     top3: {
       borderRadius: ' 50%',
