@@ -12,8 +12,9 @@ import {
   CircularProgress,
 } from '@material-ui/core';
 import ApplyLoan from './company/ApplyLoan';
-import ManageLoan from './ManageLoans';
+import ManageLoan from './banks/ManageLoans';
 import Company from './company/Company';
+import Bank from './banks/Bank';
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -50,9 +51,30 @@ const useStyles = makeStyles((theme) => {
 const LoanManagement = () => {
   const classes = useStyles();
   const [loans, setLoans] = React.useState([
-    { id: 1, date: 11111, provider: 'DBS', amount: 30091, status: 'pending' },
-    { id: 2, date: 11111, provider: 'BofA', amount: 696969, status: 'defaulted' },
-    { id: 3, date: 11111, provider: 'BofA', amount: 402402, status: 'paid' },
+    {
+      id: 1,
+      date: 11111,
+      provider: 'BDS',
+      amount: 30091,
+      status: 'pending',
+      uen: '198401412',
+    },
+    {
+      id: 2,
+      date: 11111,
+      provider: 'BofA',
+      amount: 696969,
+      status: 'defaulted',
+      uen: '198401412',
+    },
+    {
+      id: 3,
+      date: 11111,
+      provider: 'BofA',
+      amount: 402402,
+      status: 'paid',
+      uen: '198401412',
+    },
   ]);
   const [banks, setBanks] = React.useState([
     'BDS',
@@ -65,9 +87,11 @@ const LoanManagement = () => {
   const [isLoading, setIsLoading] = React.useState();
 
   // TODO: take the following from localstorage
-  const [isCompany] = React.useState(true);
   const [uen] = React.useState('198401412');
-  const [name] = React.useState('Rick Grimes Pte Ltd');
+  // const [isCompany] = React.useState(true);
+  // const [name] = React.useState('Rick Grimes Pte Ltd');
+  const [isCompany] = React.useState(false);
+  const [name] = React.useState('BDS');
 
   React.useEffect(async () => {
     const fetchBanks = async () => {
@@ -96,7 +120,7 @@ const LoanManagement = () => {
           {isCompany ? (
             <Company uen={uen} companyName={name} banks={banks} loans={loans} />
           ) : (
-            <ManageLoan bankName={name} />
+            <Bank bankName={name} loans={loans} />
           )}
         </div>
       )}

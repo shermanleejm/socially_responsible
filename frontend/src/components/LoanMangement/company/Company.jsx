@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Grid, makeStyles, Typography } from '@material-ui/core';
 import ApplyLoan from './ApplyLoan';
 import axios from 'axios';
-import DisplayLoans from './DisplayLoans';
+import DisplayLoans from '../DisplayLoans';
 
 const useStyles = makeStyles((theme) => {
   return {
