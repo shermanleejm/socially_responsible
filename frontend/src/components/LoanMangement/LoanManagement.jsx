@@ -11,8 +11,9 @@ import {
   Grid,
   CircularProgress,
 } from '@material-ui/core';
-import ApplyLoan from './ApplyLoan';
+import ApplyLoan from './company/ApplyLoan';
 import ManageLoan from './ManageLoans';
+import Company from './company/Company';
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -49,11 +50,9 @@ const useStyles = makeStyles((theme) => {
 const LoanManagement = () => {
   const classes = useStyles();
   const [loans, setLoans] = React.useState([
-    [
-      { id: 1, date: 11111, provider: 'DBS', amount: 30091, status: 'pending' },
-      { id: 2, date: 11111, provider: 'BofA', amount: 696969, status: 'defaulted' },
-      { id: 3, date: 11111, provider: 'BofA', amount: 402402, status: 'paid' },
-    ],
+    { id: 1, date: 11111, provider: 'DBS', amount: 30091, status: 'pending' },
+    { id: 2, date: 11111, provider: 'BofA', amount: 696969, status: 'defaulted' },
+    { id: 3, date: 11111, provider: 'BofA', amount: 402402, status: 'paid' },
   ]);
   const [banks, setBanks] = React.useState([
     'BDS',
@@ -64,7 +63,11 @@ const LoanManagement = () => {
     'SoldmanGachs',
   ]);
   const [isLoading, setIsLoading] = React.useState();
+
+  // TODO: take the following from localstorage
   const [isCompany] = React.useState(true);
+  const [uen] = React.useState('198401412');
+  const [name] = React.useState('Rick Grimes Pte Ltd');
 
   React.useEffect(async () => {
     const fetchBanks = async () => {
@@ -89,7 +92,13 @@ const LoanManagement = () => {
           <CircularProgress color="secondary" />
         </div>
       ) : (
-        <div>{isCompany ? <ApplyLoan /> : <ManageLoan />}</div>
+        <div>
+          {isCompany ? (
+            <Company uen={uen} companyName={name} banks={banks} loans={loans} />
+          ) : (
+            <ManageLoan bankName={name} />
+          )}
+        </div>
       )}
     </div>
   );
