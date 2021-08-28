@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import AmountField from './AmountField';
 import TitleField from './TitleField';
 import DateField from './DateField';
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -31,6 +32,37 @@ export const AddFinancials = () => {
     });
   }
 
+  const sendExpense = () => {
+    axios.get(process.env.REACT_APP_API_LOCAL + 'add-expense', {
+      params: {
+        amount: values.expenseAmount,
+        name: values.expenseTitle,
+        uen: '12345', // TODO: retrieve from localstorage
+      },
+    });
+    setValues({
+      ...values,
+      expenseAmount: 0,
+      expenseTitle: '',
+      expenseDate: new Date(),
+    });
+  };
+
+  const sendRevenue = () => {
+    axios.get(process.env.REACT_APP_API_LOCAL + 'add-revenue', {
+      params: {
+        amount: values.revenueAmount,
+        name: 'revenue',
+        uen: '12345', // TODO: retrieve from localstorage
+      },
+    });
+    setValues({
+      ...values,
+      revenueAmount: 0,
+      revenueDate: new Date(),
+    });
+  };
+
   return (
     <div>
       <Grid
@@ -56,7 +88,12 @@ export const AddFinancials = () => {
             </Typography>
           </Grid>
           <Grid item>
-            <TitleField />
+            <TitleField
+              values={values.expenseTitle}
+              title="Item Name"
+              callback={callback}
+              keyName="expenseTitle"
+            />
           </Grid>
           <Grid item>
             <AmountField
@@ -74,7 +111,12 @@ export const AddFinancials = () => {
             />
           </Grid>
           <Grid item>
-            <Button variant="contained" color="primary" style={{ color: 'white' }}>
+            <Button
+              variant="contained"
+              color="primary"
+              style={{ color: 'white' }}
+              onClick={() => sendExpense()}
+            >
               Submit Expense
             </Button>
           </Grid>
@@ -110,7 +152,12 @@ export const AddFinancials = () => {
             />
           </Grid>
           <Grid item>
-            <Button variant="contained" color="primary" style={{ color: 'white' }}>
+            <Button
+              variant="contained"
+              color="primary"
+              style={{ color: 'white' }}
+              onClick={() => sendRevenue()}
+            >
               Submit Revenue
             </Button>
           </Grid>
