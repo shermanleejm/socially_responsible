@@ -90,7 +90,7 @@ export const AddFinancials = () => {
           <Grid item>
             <TitleField
               values={values.expenseTitle}
-              title="Item Name"
+              title="Name"
               callback={callback}
               keyName="expenseTitle"
             />
