@@ -31,6 +31,11 @@ import {
   YAxis,
   Label,
   ResponsiveContainer,
+  Pie,
+  PieChart,
+  Cell,
+  Tooltip,
+  Legend,
 } from "recharts";
 
 const useStyles = makeStyles((theme) => {
@@ -73,7 +78,7 @@ function Dashboard() {
       .then((response) => {
         // console.log(response.data)
         setRevenues(response.data);
-        console.log(revenues);
+        //console.log(revenues);
         // revenue_response = response.data
       })
       .catch((error) => {
@@ -89,7 +94,7 @@ function Dashboard() {
       .then((response) => {
         //console.log(response.data)
         setExpenses(response.data);
-        console.log(expenses);
+        //console.log(expenses);
         // expense_response = response.data
       })
       .catch((error) => {
@@ -97,69 +102,114 @@ function Dashboard() {
       });
   }, []);
 
-  console.log(revenues);
-  console.log(expenses);
+  //console.log(revenues);
+  //console.log(expenses);
 
   // format endpoint results for line chart input
   var all_dates = [];
   if (revenues !== null && expenses !== null) {
     for (let rev_date of Object.keys(revenues)) {
       if (all_dates.includes(rev_date) === false) {
-        console.log(rev_date);
+        //console.log(rev_date);
         all_dates.push(rev_date);
       }
     }
 
     for (let exp_date of Object.keys(expenses)) {
       if (all_dates.includes(exp_date) === false) {
-        console.log(exp_date);
+        //console.log(exp_date);
         all_dates.push(exp_date);
       }
     }
   }
 
-  console.log(all_dates);
+  // console.log(all_dates);
 
   var data = [];
 
-
   for (let date of all_dates) {
-    if (
+    if ( // if date has both revenue and expense
       revenues.hasOwnProperty(date) === true &&
       expenses.hasOwnProperty(date) === true
     ) {
       data.push(
         createData(
           date,
-          revenues[date]['amount'],
-          expenses[date]['amount'],
-          revenues[date]['amount'], - expenses[date]['amount'],
+          revenues[date]["amount"],
+          expenses[date]["amount"],
+          revenues[date]["amount"],
+          -expenses[date]["amount"]
         )
       );
-    } else if (
+    } else if ( // if date only has revenue
       revenues.hasOwnProperty(date) === true &&
       expenses.hasOwnProperty(date) === false
     ) {
-      data.push(createData(date, revenues[date]['amount'], 0, revenues[date]['amount'], - 0));
-    } else if (
+      data.push(
+        createData(
+          date,
+          revenues[date]["amount"],
+          0,
+          revenues[date]["amount"],
+          -0
+        )
+      );
+    } else if ( // if date only has expense
       revenues.hasOwnProperty(date) === false &&
       expenses.hasOwnProperty(date) === true
     ) {
-      data.push(createData(date, 0, expenses[date]['amount'], 0 - expenses[date]['amount'],));
+      data.push(
+        createData(
+          date,
+          0,
+          expenses[date]["amount"],
+          0 - expenses[date]["amount"]
+        )
+      );
     }
   }
 
-  console.log(data);
+  // revenue vs expense pie chart
+  const pie_chart_colors = ['#dc3545', '#28a745']
+  var total_revenue = 0;
+  var total_expense = 0;
 
-  // var data = [
-  //   // date, expense, revenue, profit
-  //   createData("2021-05-28", 500, 1000, 500),
-  //   createData("2021-05-29", 600, 1000, 400),
-  //   createData("2021-05-30", 700, 1200, 500),
-  //   createData("2021-05-31", 100, 1300, 1200),
-  //   createData("2021-06-01", 400, 1500, 1100),
-  //   createData("2021-06-02", 300, 1900, 1600),
-  // ];
+  for (let date of all_dates) {
+    if (revenues.hasOwnProperty(date)) {
+      total_revenue += revenues[date]['amount']
+    }
+
+    if (expenses.hasOwnProperty(date)) {
+      total_expense += expenses[date]['amount']
+    }
+  }
+
+  // console.log(total_revenue)
+  // console.log(total_expense)
+
+  const pieData = [
+    {
+      "name": "Total Expense",
+      "value": total_expense
+    },
+    {
+      "name": "Total Revenue",
+      "value": total_revenue
+    },
+    
+  ]
+
+  const CustomTooltip = ({ active, payload, label }) => {
+      if (active) {
+          return (
+              <div className="custom-tooltip" style={{ backgroundColor: '#ffff', padding: '5px', border: '1px solid #cccc' }}>
+                  <label>{`${payload[0].name} : $${payload[0].value}`}</label>
+              </div>
+          );
+      }
+      return null;
+  };
+
 
   if (revenues === null && expenses === null) {
     return <div>Loading...</div>;
@@ -171,10 +221,47 @@ function Dashboard() {
         direction="column"
         justifyContent="center"
         alignItems="center"
-        spacing={5}
+        spacing={0}
       >
         <Grid container justifyContent="center" alignItems="center">
           <h2>Dashboard</h2>
+        </Grid>
+
+        <Grid item xs={12} md={6} lg={6} width={170}>
+          <ResponsiveContainer>
+            <Card className={classes.cardcustom}>
+              <CardContent>
+                <Typography className={classes.cardheader}>Profit</Typography>
+                <LineChart data={data} height={200} width={400}>
+                  <XAxis dataKey="date" />
+                  <YAxis />
+
+                  <Line type="monotone" dataKey="profit" dot={true} />
+                </LineChart>
+              </CardContent>
+            </Card>
+          </ResponsiveContainer>
+        </Grid>
+
+        <Grid item xs={12} md={6} lg={6} width={170}>
+          <ResponsiveContainer>
+            <Card className={classes.cardcustom}>
+              <CardContent>
+                <Typography className={classes.cardheader}>
+                  Revenue vs Expenses
+                </Typography>
+                <PieChart width={300} height={300}>
+                  <Pie data={pieData} color="#000000" dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={120} fill="#8884d8" >
+                    {
+                        pieData.map((entry, index) => <Cell key={`cell-${index}`} fill={pie_chart_colors[index % pie_chart_colors.length]} />)
+                    }
+                </Pie>
+                <Tooltip content={<CustomTooltip />} />
+                <Legend />
+                </PieChart>
+              </CardContent>
+            </Card>
+          </ResponsiveContainer>
         </Grid>
 
         <Grid item xs={12} md={6} lg={6} width={170}>
@@ -202,22 +289,6 @@ function Dashboard() {
                   <YAxis />
 
                   <Line type="monotone" dataKey="revenue" dot={true} />
-                </LineChart>
-              </CardContent>
-            </Card>
-          </ResponsiveContainer>
-        </Grid>
-
-        <Grid item xs={12} md={6} lg={6} width={170}>
-          <ResponsiveContainer>
-            <Card className={classes.cardcustom}>
-              <CardContent>
-                <Typography className={classes.cardheader}>Profit</Typography>
-                <LineChart data={data} height={200} width={400}>
-                  <XAxis dataKey="date" />
-                  <YAxis />
-
-                  <Line type="monotone" dataKey="profit" dot={true} />
                 </LineChart>
               </CardContent>
             </Card>
