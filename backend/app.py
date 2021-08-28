@@ -17,6 +17,7 @@ from dateutil import parser
 import hashlib, uuid
 from datetime import datetime
 
+
 app = Flask(__name__)
 api = Api(
     app,
@@ -55,7 +56,7 @@ class Companies(db.Model):
 
     uen = db.Column(db.String(256), primary_key=True)
     name = db.Column(db.String(256), nullable=False)
-    credit_score = db.Column(db.Date, nullable=False)
+    credit_score = db.Column(db.Float(precision=2), nullable=False)
 
     def __init__(self, uen, name, credit_score):
         self.uen = uen
@@ -74,7 +75,7 @@ class Expenditure(db.Model):
     amount = db.Column(db.Float(precision=2), nullable=False)
     name = db.Column(db.String(1000), nullable=False)
     uen = db.Column(db.String(256), nullable=True)
-    timestamp = db.Column(db.DateTime, nullable=False)
+    timestamp = db.Column(db.Date, nullable=False)
 
     def __init__(self, amount, name, uen, timestamp):
         self.amount = amount
@@ -99,7 +100,7 @@ class Revenue(db.Model):
     amount = db.Column(db.Float(precision=2), nullable=False)
     name = db.Column(db.String(1000), nullable=False)
     uen = db.Column(db.String(256), nullable=True)
-    timestamp = db.Column(db.DateTime, nullable=False)
+    timestamp = db.Column(db.Date, nullable=False)
 
     def __init__(self, amount, name, uen, timestamp):
         self.amount = amount
@@ -194,9 +195,7 @@ add_expense_parser = api.parser()
 add_expense_parser.add_argument("amount", help="How much the expense was.")
 add_expense_parser.add_argument("name", help="Name or short description of expense.")
 add_expense_parser.add_argument("uen", help="uen of the company")
-add_expense_parser.add_argument(
-    "timestamp", help="Date and time of when the expense was made"
-)
+add_expense_parser.add_argument("timestamp", help="Date of when the expense was made")
 
 
 @api.route("/add-expense")
@@ -208,14 +207,6 @@ class AddExpense(Resource):
         name = add_expense_parser.parse_args().get("name")
         uen = add_expense_parser.parse_args().get("uen")
         timestamp = add_expense_parser.parse_args().get("timestamp")
-        print(type(amount))
-        print(amount)
-        print(type(name))
-        print(name)
-        print(type(uen))
-        print(uen)
-        print(type(timestamp))
-        print(timestamp)
         expense = Expenditure(float(amount), name, uen, timestamp)
         try:
             db.session.add(expense)
@@ -230,9 +221,7 @@ add_revenue_parser = api.parser()
 add_revenue_parser.add_argument("amount", help="How much the revenue was.")
 add_revenue_parser.add_argument("name", help="Name or short description of expense.")
 add_revenue_parser.add_argument("uen", help="uen of the company")
-add_revenue_parser.add_argument(
-    "timestamp", help="Date and time of when the expense was made"
-)
+add_revenue_parser.add_argument("timestamp", help="Date of when the expense was made")
 
 
 @api.route("/add-revenue")
@@ -265,18 +254,35 @@ class GetRevenue(Resource):
     def get(self):
         uen = add_revenue_parser.parse_args().get("uen")
         revenue_info = {}
-        for exp in Revenue.query.filter_by(uen=uen):
-            revenue_info[exp.json()["timestamp"].strftime("%m/%d/%Y, %H:%M:%S")] = {
+        for rev in Revenue.query.filter_by(uen=uen):
+            revenue_info[rev.json()["timestamp"].strftime("%Y-%m-%d")] = {
+                "name": rev.json()["name"],
+                "amount": rev.json()["amount"],
+            }
+        if len(revenue_info) == 0:
+            return "No revenue found"
+        return revenue_info
+
+
+get_expense_parser = api.parser()
+get_expense_parser.add_argument("uen", help="UEN of company to retrieve expenses of.")
+
+
+@api.route("/get-expense")
+@api.doc(description="Get revenue of a particular company")
+class GetExpense(Resource):
+    @api.expect(get_expense_parser)
+    def get(self):
+        uen = get_expense_parser.parse_args().get("uen")
+        expenses_info = {}
+        for exp in Expenditure.query.filter_by(uen=uen):
+            expenses_info[exp.json()["timestamp"].strftime("%Y-%m-%d")] = {
                 "name": exp.json()["name"],
                 "amount": exp.json()["amount"],
             }
-        return revenue_info
-        # try:
-        #     print("test")
-        #     return "success", 200
-        # except:
-        #     print("Failed")
-        #     return "Failed", 400
+        if len(expenses_info) == 0:
+            return "No expenses found"
+        return expenses_info
 
 
 @api.route("/leaderboard")
