@@ -30,3 +30,7 @@ CREATE TABLE IF NOT EXISTS `loan` (
     `uen` VARCHAR(256),
     `status` VARCHAR(256) NOT NULL
 );
+CREATE TABLE IF NOT EXISTS `investors` (
+    `username` VARCHAR(256) NOT NULL PRIMARY KEY,
+    `hashed_password` VARCHAR(1000) NOT NULL,
+);
