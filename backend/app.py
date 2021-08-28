@@ -9,11 +9,12 @@ import random
 import string
 import pandas as pd
 import pickle
-import sklearn  # added to requirements
+import sklearn
 from flask_sqlalchemy import SQLAlchemy
 import mysql.connector
 from mysql.connector import errorcode
 from dateutil import parser
+import hashlib, uuid
 
 app = Flask(__name__)
 api = Api(
@@ -275,7 +276,7 @@ class Leaderboard(Resource):
         ]:
             res.append(
                 {
-                    "company": name,
+                    "company": name + " Pte. Ltd.",
                     "uen": "".join(random.choices(string.digits, k=14)),
                     "credit": round(random.uniform(0, 5), 1),
                     "financial": round(random.uniform(0, 5), 1),
