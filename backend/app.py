@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request, Response, url_for
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from flask_restplus import Api, Resource, fields
 from dotenv import load_dotenv
 import pymysql.cursors
@@ -13,6 +13,10 @@ import string
 import pandas as pd
 import pickle
 import sklearn #added to requirements
+from flask_sqlalchemy import SQLAlchemy
+import mysql.connector
+from mysql.connector import errorcode
+from dateutil import parser
 
 app = Flask(__name__)
 api = Api(
@@ -26,11 +30,72 @@ app.wsgi_app = ProxyFix(app.wsgi_app)
 
 load_dotenv()
 
+#==================== connect to database ====================#
+app.config['CORS_HEADERS'] = 'Content-Type'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://admin:password@database-1.cetp5zmopzbq.us-east-1.rds.amazonaws.com:3306/socially_responsible'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+
+# try:
+#   cnx = mysql.connector.connect(user='admin', password="password",host="database-1.cetp5zmopzbq.us-east-1.rds.amazonaws.com",database='socially_responsible')
+#   print("connected")
+# except mysql.connector.Error as err:
+#   if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+#     print("Something is wrong with your user name or password")
+#   elif err.errno == errorcode.ER_BAD_DB_ERROR:
+#     print("Database does not exist")
+#   else:
+#     print(err)
+
+
+################## Companies Class Creation ##################
+class Companies(db.Model):
+    __tablename__ = 'companies'
+
+    uen = db.Column(db.String(256), primary_key=True)
+    name = db.Column(db.String(256), nullable=False)
+    credit_score = db.Column(db.Date, nullable=False)
+
+    def __init__(self, uen, name, credit_score):
+        self.uen = uen
+        self.name = name
+        self.credit_score = credit_score
+
+    def json(self):
+        return {"uen": self.uen, "name": self.name, "credit_score": self.credit_score}
+
+################## Expenditure Class Creation ##################
+class Expenditure(db.Model):
+    __tablename__ = 'expenditure'
+
+    expenditure_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    amount = db.Column(db.Float(precision=2), nullable=False)
+    name = db.Column(db.String(1000), nullable=False)
+    uen = db.Column(db.String(256), nullable=True)
+    timestamp = db.Column(db.DateTime, nullable=False)
+
+    def __init__(self, amount, name, uen, timestamp):
+        self.amount = amount
+        self.name = name
+        self.uen = uen
+        self.timestamp = timestamp
+
+    def json(self):
+        return {"amount": self.amount, "name": self.name , "uen": self.uen , "timestamp": self.timestamp}
+
+
+
+
+#==================== Connected to database ====================#
+
+
+
+
+
 calc_credit_parser = api.parser()
 calc_credit_parser.add_argument(
     "details", help="Details of company to help with risk calculation, collected as part of onboarding process."
 )
-
 
 @api.route("/calculate")
 @api.doc(description="Calculates the risk profile score for a company. Outputs a numerical risk score from 1 to 10, 1 being the least risky")
@@ -70,18 +135,35 @@ class CalculateCreditRisk(Resource):
 
 add_expense_parser = api.parser()
 add_expense_parser.add_argument("amount", help="How much the expense was.")
-add_expense_parser.add_argument("title", help="Name of expense.")
-
+add_expense_parser.add_argument("name", help="Name or short description of expense.")
+add_expense_parser.add_argument("uen", help="uen of the company")
+add_expense_parser.add_argument("timestamp", help="Date and time of when the expense was made")
 
 @api.route("/add-expense")
 @api.doc(description="Add a new expense")
-class AddExpanse(Resource):
+class AddExpense(Resource):
     @api.expect(add_expense_parser)
     def get(self):
-        amount = calc_credit_parser.parse_args().get("amount")
-        title = calc_credit_parser.parse_args().get("title")
-        # add to db
-        return "success", 200
+        amount = add_expense_parser.parse_args().get("amount")
+        name = add_expense_parser.parse_args().get("name")
+        uen = add_expense_parser.parse_args().get("uen")
+        timestamp = add_expense_parser.parse_args().get("timestamp")
+        print(type(amount))
+        print(amount)
+        print(type(name))
+        print(name)
+        print(type(uen))
+        print(uen)
+        print(type(timestamp))
+        print(timestamp)
+        expense = Expenditure(float(amount),name,uen,timestamp)
+        try:
+            db.session.add(expense)
+            db.session.commit()
+            return "success", 200
+        except:
+            print("Failed")
+            return "success", 200
 
 
 @api.route("/leaderboard")

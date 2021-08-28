@@ -28,6 +28,8 @@ tqdm==4.60.0
 urllib3==1.26.4
 vaderSentiment==3.3.2
 Werkzeug==0.16.1
-sng==0.3.2
 scikit-learn==0.24.1
 catboost==0.26.1
+Flask-SQLAlchemy==2.4.0
+SQLAlchemy<1.4
+sng==0.3.2
