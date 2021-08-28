@@ -521,6 +521,32 @@ class CompaniesRegistration(Resource):
                 return 400,"Unexpected error in registration"
 
 
+companies_login_parser = api.parser()
+companies_login_parser.add_argument("uen", help="UEN of company")
+companies_login_parser.add_argument("password", help="Password")
+@api.route("/companies_login")
+@api.doc(description="Login for companies")
+class CompaniesLogin(Resource):
+    @api.expect(companies_login_parser)
+    def get(self):
+        uen = companies_login_parser.parse_args().get("uen")
+        password = companies_login_parser.parse_args().get("password")
+        acc = Companies.query.filter_by(uen=uen).count()
+        if acc > 0:
+            exists=True
+        else:
+            exists=False
+        if exists==False:
+            return 400, "UEN does not exist"
+        else:
+            hashed_db_password = Companies.query.filter_by(uen=uen).first().hashed_password
+            db_salt = Companies.query.filter_by(uen=uen).first().salt
+            hashed_password = hashlib.sha512((password + db_salt).encode('utf-8')).hexdigest()
+            if hashed_password==hashed_db_password:
+                return 200, "Login successful"
+            else:
+                return 400, "Incorrect password"
+
 
 investor_registration_parser = api.parser()
 investor_registration_parser.add_argument("username", help="Username")
@@ -577,12 +603,6 @@ class InvestorLogin(Resource):
                 return 200, "Login successful"
             else:
                 return 400, "Incorrect password"
-            # try:
-            #     db.session.add(investors)
-            #     db.session.commit()
-            #     return 200, "Success"
-            # except:
-            #     return 400,"Unexpected error in registration"
 
 def checkLoanStatus():
     pass
