@@ -16,7 +16,7 @@ import sklearn #added to requirements
 from flask_sqlalchemy import SQLAlchemy
 import mysql.connector
 from mysql.connector import errorcode
-from dateutil import parser
+from datetime import datetime
 
 app = Flask(__name__)
 api = Api(
@@ -206,6 +206,27 @@ class AddRevenue(Resource):
             print("Failed")
             return "Failed", 400
 
+
+get_revenue_parser = api.parser()
+get_revenue_parser.add_argument("uen", help="UEN of company to retrieve revenue of.")
+@api.route("/get-revenue")
+@api.doc(description="Get revenue of a particular company")
+class GetRevenue(Resource):
+    @api.expect(get_revenue_parser)
+    def get(self):
+        uen = add_revenue_parser.parse_args().get("uen")
+        revenue_info = {}
+        for exp in Revenue.query.filter_by(uen=uen):
+            revenue_info[exp.json()["timestamp"].strftime("%m/%d/%Y, %H:%M:%S")] = {"name":exp.json()["name"],"amount":exp.json()["amount"]} 
+        return revenue_info
+        # try:
+        #     print("test")
+        #     return "success", 200
+        # except:
+        #     print("Failed")
+        #     return "Failed", 400
+
+
 @api.route("/leaderboard")
 @api.doc(description="Get latest leaderboard rankings")
 class Leaderboard(Resource):
@@ -224,6 +245,8 @@ class Leaderboard(Resource):
                 }
             )
         return res
+
+
 
 
 def login():
