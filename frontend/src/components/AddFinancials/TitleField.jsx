@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
-const ExpenseField = (props) => {
+const TitleField = (props) => {
   const classes = useStyles();
   const { values, callback, title, keyName, ...rest } = props;
   return (
@@ -28,4 +28,4 @@ const ExpenseField = (props) => {
   );
 };
 
-export default ExpenseField;
+export default TitleField;

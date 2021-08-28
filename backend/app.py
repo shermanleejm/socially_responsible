@@ -349,7 +349,7 @@ new_loan_parser = api.parser()
 new_loan_parser.add_argument("amount",help="Amount requested")
 new_loan_parser.add_argument("bank",help="Which bank loan is requested from")
 new_loan_parser.add_argument("uen",help="uen of company")
-@api.route("/new_loan")
+@api.route("/new-loan")
 @api.doc(description="Request loan from bank")
 class newLoan(Resource):
     @api.expect(new_loan_parser)

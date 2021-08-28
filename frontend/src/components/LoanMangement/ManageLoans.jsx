@@ -1,6 +1,7 @@
 import React from 'react';
 
-const ManageLoan = () => {
+const ManageLoan = (props) => {
+  
   return <div>Manage loans here</div>;
 };
 

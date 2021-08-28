@@ -48,7 +48,11 @@ const AmountField = (props) => {
         label={title}
         value={values}
         onChange={(event) => {
-          callback(event.target.value, keyName);
+          if (keyName === undefined) {
+            callback(event.target.value);
+          } else {
+            callback(event.target.value, keyName);
+          }
         }}
         InputProps={{
           inputComponent: NumberFormatCustom,
