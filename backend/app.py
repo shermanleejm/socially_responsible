@@ -151,15 +151,18 @@ class Investors(db.Model):
 
     username = db.Column(db.String(256), primary_key=True, nullable=False)
     hashed_password = db.Column(db.String(1000),nullable=False)
+    salt = db.Column(db.String(1000),nullable=False)
 
-    def __init__(self, username, hashed_password):
+    def __init__(self, username, hashed_password, salt):
         self.username = username
         self.hashed_password = hashed_password
+        self.salt = salt
 
     def json(self):
         return {
             "username": self.username,
             "hashed_password": self.hashed_password,
+            "salt": self.salt,
         }
 
 
@@ -414,14 +417,45 @@ class InvestorRegistration(Resource):
         else:
             salt = uuid.uuid4().hex
             hashed_password= hashlib.sha512((password + salt).encode('utf-8')).hexdigest()
-            investors = Investors(username,hashed_password)
-            print(len(hashed_password))
+            investors = Investors(username,hashed_password,salt)
             try:
                 db.session.add(investors)
                 db.session.commit()
                 return 200, "Success"
             except:
                 return 400,"Unexpected error in registration"
+
+investor_login_parser = api.parser()
+investor_login_parser.add_argument("username", help="Username")
+investor_login_parser.add_argument("password", help="Password")
+@api.route("/investor_login")
+@api.doc(description="Login for investors")
+class InvestorLogin(Resource):
+    @api.expect(investor_login_parser)
+    def get(self):
+        username = investor_login_parser.parse_args().get("username")
+        password = investor_login_parser.parse_args().get("password")
+        acc = Investors.query.filter_by(username=username).count()
+        if acc > 0:
+            exists=True
+        else:
+            exists=False
+        if exists==False:
+            return 400, "username does not exist"
+        else:
+            hashed_db_password = Investors.query.filter_by(username=username).first().hashed_password
+            db_salt = Investors.query.filter_by(username=username).first().salt
+            hashed_password = hashlib.sha512((password + db_salt).encode('utf-8')).hexdigest()
+            if hashed_password==hashed_db_password:
+                return 200, "Login successful"
+            else:
+                return 400, "Incorrect password"
+            # try:
+            #     db.session.add(investors)
+            #     db.session.commit()
+            #     return 200, "Success"
+            # except:
+            #     return 400,"Unexpected error in registration"
 
 def checkLoanStatus():
     pass
