@@ -1,6 +1,6 @@
 import './App.css';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import Dashboard from './components/Dashboard.js';
+import Dashboard from './components/Dashboard';
 import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
 import { SideBar } from './components/SideBar';
 import { pages } from './components/Pages';
