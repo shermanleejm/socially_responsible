@@ -12,6 +12,10 @@ const useStyles = makeStyles((theme) => {
     heading: {
       marginBottom: '20px',
     },
+    button: {
+      color: 'white',
+      backgroundColor: theme.palette.primary.main2,
+    },
   };
 });
 
@@ -33,6 +37,9 @@ export const AddFinancials = () => {
   }
 
   const sendExpense = () => {
+    if (values.expenseAmount === 0 && values.expenseTitle === '') {
+      return;
+    }
     axios.get(process.env.REACT_APP_API_LOCAL + 'add-expense', {
       params: {
         amount: values.expenseAmount,
@@ -49,6 +56,9 @@ export const AddFinancials = () => {
   };
 
   const sendRevenue = () => {
+    if (values.revenueAmount === 0) {
+      return;
+    }
     axios.get(process.env.REACT_APP_API_LOCAL + 'add-revenue', {
       params: {
         amount: values.revenueAmount,
@@ -114,7 +124,7 @@ export const AddFinancials = () => {
             <Button
               variant="contained"
               color="primary"
-              style={{ color: 'white' }}
+              className={classes.button}
               onClick={() => sendExpense()}
             >
               Submit Expense
@@ -154,8 +164,7 @@ export const AddFinancials = () => {
           <Grid item>
             <Button
               variant="contained"
-              color="primary"
-              style={{ color: 'white' }}
+              className={classes.button}
               onClick={() => sendRevenue()}
             >
               Submit Revenue
