@@ -16,7 +16,7 @@ from mysql.connector import errorcode
 from dateutil import parser
 import hashlib, uuid
 from datetime import datetime
-
+import hashlib, uuid
 
 app = Flask(__name__)
 api = Api(
@@ -144,6 +144,24 @@ class Loan(db.Model):
             "uen": self.uen,
             "status": self.status,
         }
+
+################## Investor Class Creation ##################
+class Investors(db.Model):
+    __tablename__ = "investors"
+
+    username = db.Column(db.String(256), primary_key=True, nullable=False)
+    hashed_password = db.Column(db.String(1000),nullable=False)
+
+    def __init__(self, username, hashed_password):
+        self.username = username
+        self.hashed_password = hashed_password
+
+    def json(self):
+        return {
+            "username": self.username,
+            "hashed_password": self.hashed_password,
+        }
+
 
 # ==================== Connected to database ====================#
 
@@ -374,17 +392,36 @@ class newLoan(Resource):
 
                 
 
-
-def login():
-    pass
-
-
-def register():
-    pass
-
-
-
-
+investor_registration_parser = api.parser()
+investor_registration_parser.add_argument("username", help="Username")
+investor_registration_parser.add_argument("password", help="Password")
+@api.route("/investor_register")
+@api.doc(description="Registration for investors")
+class InvestorRegistration(Resource):
+    @api.expect(investor_registration_parser)
+    def get(self):
+        username = investor_registration_parser.parse_args().get("username")
+        password = investor_registration_parser.parse_args().get("password")
+        # exists = db.session.query(username).filter(username=username).first() is not None
+        acc = Investors.query.filter_by(username=username).count()
+        print(acc)
+        if acc > 0:
+            exists=True
+        else:
+            exists=False
+        if exists:
+            return 400, "username already exists"
+        else:
+            salt = uuid.uuid4().hex
+            hashed_password= hashlib.sha512((password + salt).encode('utf-8')).hexdigest()
+            investors = Investors(username,hashed_password)
+            print(len(hashed_password))
+            try:
+                db.session.add(investors)
+                db.session.commit()
+                return 200, "Success"
+            except:
+                return 400,"Unexpected error in registration"
 
 def checkLoanStatus():
     pass
