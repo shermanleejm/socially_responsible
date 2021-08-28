@@ -259,6 +259,8 @@ class GetRevenue(Resource):
         revenue_info = {}
         for rev in Revenue.query.filter_by(uen=uen):
             revenue_info[rev.json()["timestamp"].strftime('%Y-%m-%d')] = {"name":rev.json()["name"],"amount":rev.json()["amount"]} 
+        if len(revenue_info)==0:
+            return "No revenue found"
         return revenue_info
 
 
@@ -272,7 +274,9 @@ class GetExpense(Resource):
         uen = get_expense_parser.parse_args().get("uen")
         expenses_info = {}
         for exp in Expenditure.query.filter_by(uen=uen):
-            expenses_info[exp.json()["timestamp"].strftime('%Y-%m-%d')] = {"name":exp.json()["name"],"amount":exp.json()["amount"]} 
+            expenses_info[exp.json()["timestamp"].strftime('%Y-%m-%d')] = {"name":exp.json()["name"],"amount":exp.json()["amount"]}
+        if len(expenses_info) == 0:
+            return "No expenses found"
         return expenses_info
 
 
