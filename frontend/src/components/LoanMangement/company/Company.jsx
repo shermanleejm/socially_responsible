@@ -89,6 +89,17 @@ const Company = (props) => {
               >
                 Submit application
               </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                className={classes.button}
+                onClick={() => {
+                  setShowApplyLoan(false);
+                }}
+                style={{ marginTop: '20px' }}
+              >
+                Cancel
+              </Button>
             </div>
           ) : (
             <Button
