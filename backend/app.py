@@ -30,6 +30,8 @@ app.wsgi_app = ProxyFix(app.wsgi_app)
 
 load_dotenv()
 
+banks = ["BDS", "cbc", "BofA", "obu", "JMorgan", "SoldmanGachs"]
+
 # ==================== connect to database ====================#
 app.config["CORS_HEADERS"] = "Content-Type"
 app.config[
@@ -338,7 +340,8 @@ def checkLoanStatus():
 @api.doc(description="Return list of supporting banks for loans")
 class GetBanks(Resource):
     def get(self):
-        return ["BDS", "cbc", "BofA", "obu", "JMorgan", "SoldmanGachs"]
+        global banks
+        return banks
 
 
 if __name__ == "__main__":
