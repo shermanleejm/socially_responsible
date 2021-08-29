@@ -44,5 +44,7 @@ You should see the following
 Simple contract for recording loans.  
 You need to have Ganache and Truffle installed on your local machine.
 
-1. `truffle compile`
-2. `truffle migrate`
+1. `cd contracts`
+2. `npm install`
+3. `truffle compile`
+4. `truffle migrate`
