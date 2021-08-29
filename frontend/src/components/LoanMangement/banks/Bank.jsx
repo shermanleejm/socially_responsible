@@ -64,7 +64,6 @@ const Bank = (props) => {
         alignItems="center"
       >
         {loans.map((loan, index) => {
-          console.log(loan);
           return (
             <Grid item>
               <Paper className={classes.leaderboardrow} elevation={3}>

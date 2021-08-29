@@ -1,4 +1,4 @@
-import React, { Component, useEffect } from "react";
+import React, { Component, useEffect } from 'react';
 import {
   Table,
   TableBody,
@@ -20,9 +20,9 @@ import {
   CardContent,
   CardHeader,
   Button,
-} from "@material-ui/core";
+} from '@material-ui/core';
 
-import axios from "axios";
+import axios from 'axios';
 
 import {
   LineChart,
@@ -36,22 +36,29 @@ import {
   Cell,
   Tooltip,
   Legend,
-} from "recharts";
+} from 'recharts';
 
 const useStyles = makeStyles((theme) => {
   return {
     cardheader: {
-      display: "flex",
-      justifyContent: "center",
+      display: 'flex',
+      justifyContent: 'center',
     },
     cardcustom: {
       backgroundColor: theme.palette.primary.main3,
-      marginTop: "50px",
-      display: "flex",
-      justifyContent: "center",
-      width: "400",
-      margin: "0",
-      padding: "0",
+      marginTop: '50px',
+      display: 'flex',
+      justifyContent: 'center',
+      width: '400',
+      margin: '0',
+      padding: '0',
+    },
+    loadingcontainer: {
+      marginTop: '40px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      flexDirection: 'column',
     },
   };
 });
@@ -65,20 +72,18 @@ function Dashboard() {
   const [revenues, setRevenues] = React.useState(null);
   const [expenses, setExpenses] = React.useState(null);
 
-  const user_uen = "testuen";
+  const user_uen = 'testuen';
 
   // get revenue from endpoint
   React.useEffect(() => {
     axios
-      .get(process.env.REACT_APP_API_LOCAL + "get-revenue", {
+      .get(process.env.REACT_APP_API_LOCAL + 'get-revenue', {
         params: {
           uen: user_uen,
         },
       })
       .then((response) => {
-        // console.log(response.data)
         setRevenues(response.data);
-        //console.log(revenues);
         // revenue_response = response.data
       })
       .catch((error) => {
@@ -86,15 +91,13 @@ function Dashboard() {
       });
 
     axios
-      .get(process.env.REACT_APP_API_LOCAL + "get-expense", {
+      .get(process.env.REACT_APP_API_LOCAL + 'get-expense', {
         params: {
           uen: user_uen,
         },
       })
       .then((response) => {
-        //console.log(response.data)
         setExpenses(response.data);
-        //console.log(expenses);
         // expense_response = response.data
       })
       .catch((error) => {
@@ -102,117 +105,107 @@ function Dashboard() {
       });
   }, []);
 
-  //console.log(revenues);
-  //console.log(expenses);
-
   // format endpoint results for line chart input
   var all_dates = [];
   if (revenues !== null && expenses !== null) {
     for (let rev_date of Object.keys(revenues)) {
       if (all_dates.includes(rev_date) === false) {
-        //console.log(rev_date);
         all_dates.push(rev_date);
       }
     }
 
     for (let exp_date of Object.keys(expenses)) {
       if (all_dates.includes(exp_date) === false) {
-        //console.log(exp_date);
         all_dates.push(exp_date);
       }
     }
   }
 
-  // console.log(all_dates);
-
   var data = [];
 
   for (let date of all_dates) {
-    if ( // if date has both revenue and expense
+    if (
+      // if date has both revenue and expense
       revenues.hasOwnProperty(date) === true &&
       expenses.hasOwnProperty(date) === true
     ) {
       data.push(
         createData(
           date,
-          revenues[date]["amount"],
-          expenses[date]["amount"],
-          revenues[date]["amount"],
-          -expenses[date]["amount"]
+          revenues[date]['amount'],
+          expenses[date]['amount'],
+          revenues[date]['amount'],
+          -expenses[date]['amount']
         )
       );
-    } else if ( // if date only has revenue
+    } else if (
+      // if date only has revenue
       revenues.hasOwnProperty(date) === true &&
       expenses.hasOwnProperty(date) === false
     ) {
       data.push(
-        createData(
-          date,
-          revenues[date]["amount"],
-          0,
-          revenues[date]["amount"],
-          -0
-        )
+        createData(date, revenues[date]['amount'], 0, revenues[date]['amount'], -0)
       );
-    } else if ( // if date only has expense
+    } else if (
+      // if date only has expense
       revenues.hasOwnProperty(date) === false &&
       expenses.hasOwnProperty(date) === true
     ) {
       data.push(
-        createData(
-          date,
-          0,
-          expenses[date]["amount"],
-          0 - expenses[date]["amount"]
-        )
+        createData(date, 0, expenses[date]['amount'], 0 - expenses[date]['amount'])
       );
     }
   }
 
   // revenue vs expense pie chart
-  const pie_chart_colors = ['#dc3545', '#28a745']
+  const pie_chart_colors = ['#dc3545', '#28a745'];
   var total_revenue = 0;
   var total_expense = 0;
 
   for (let date of all_dates) {
     if (revenues.hasOwnProperty(date)) {
-      total_revenue += revenues[date]['amount']
+      total_revenue += revenues[date]['amount'];
     }
 
     if (expenses.hasOwnProperty(date)) {
-      total_expense += expenses[date]['amount']
+      total_expense += expenses[date]['amount'];
     }
   }
 
-  // console.log(total_revenue)
-  // console.log(total_expense)
-
   const pieData = [
     {
-      "name": "Total Expense",
-      "value": total_expense
+      name: 'Total Expense',
+      value: total_expense,
     },
     {
-      "name": "Total Revenue",
-      "value": total_revenue
+      name: 'Total Revenue',
+      value: total_revenue,
     },
-    
-  ]
+  ];
 
   const CustomTooltip = ({ active, payload, label }) => {
-      if (active) {
-          return (
-              <div className="custom-tooltip" style={{ backgroundColor: '#ffff', padding: '5px', border: '1px solid #cccc' }}>
-                  <label>{`${payload[0].name} : $${payload[0].value}`}</label>
-              </div>
-          );
-      }
-      return null;
+    if (active) {
+      return (
+        <div
+          className="custom-tooltip"
+          style={{ backgroundColor: '#ffff', padding: '5px', border: '1px solid #cccc' }}
+        >
+          <label>{`${payload[0].name} : $${payload[0].value}`}</label>
+        </div>
+      );
+    }
+    return null;
   };
 
-
   if (revenues === null && expenses === null) {
-    return <div>Loading...</div>;
+    return (
+      <div className={classes.loadingcontainer}>
+        <Typography style={{ color: '#fff' }}>
+          Hang on, getting loan information
+        </Typography>
+        <CircularProgress color="secondary" />
+      </div>
+    );
   }
   return (
     <div>
@@ -251,13 +244,25 @@ function Dashboard() {
                   Revenue vs Expenses
                 </Typography>
                 <PieChart width={300} height={300}>
-                  <Pie data={pieData} color="#000000" dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={120} fill="#8884d8" >
-                    {
-                        pieData.map((entry, index) => <Cell key={`cell-${index}`} fill={pie_chart_colors[index % pie_chart_colors.length]} />)
-                    }
-                </Pie>
-                <Tooltip content={<CustomTooltip />} />
-                <Legend />
+                  <Pie
+                    data={pieData}
+                    color="#000000"
+                    dataKey="value"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={120}
+                    fill="#8884d8"
+                  >
+                    {pieData.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={pie_chart_colors[index % pie_chart_colors.length]}
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip content={<CustomTooltip />} />
+                  <Legend />
                 </PieChart>
               </CardContent>
             </Card>

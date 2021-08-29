@@ -8,6 +8,7 @@ import HomeIcon from '@material-ui/icons/Home';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import LoanManagement from './LoanMangement/LoanManagement';
 import { Leaderboard } from './Leaderboard';
+import LoginPage from './LoginPage';
 
 export const pages = [
   {
@@ -33,6 +34,18 @@ export const pages = [
     icon: <MonetizationOnIcon />,
     link: '/loan-management',
     component: <LoanManagement />,
+  },
+  {
+    title: undefined,
+    icon: undefined,
+    link: '/login-sme',
+    component: <LoginPage user="sme" />,
+  },
+  {
+    title: undefined,
+    icon: undefined,
+    link: '/login-investor',
+    component: <LoginPage user="investor" />,
   },
   {
     title: 'Landing Page',
