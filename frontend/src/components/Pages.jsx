@@ -1,4 +1,4 @@
-import  Dashboard from './Dashboard';
+import Dashboard from './Dashboard';
 import { LandingPage } from './LandingPage';
 import { AddFinancials } from './AddFinancials/AddFinancials';
 import { Login } from './Login';
@@ -32,16 +32,16 @@ export const pages = [
     component: <AddFinancials />,
   },
   {
-<<<<<<< HEAD
     title: 'Login',
     link: '/login',
-    component:<Login />
+    component: <Login />,
   },
   {
     title: 'SignUp',
     link: '/signup',
-    component:<SignUp />
-=======
+    component: <SignUp />,
+  },
+  {
     title: 'Loan Management',
     icon: <MonetizationOnIcon />,
     link: '/loan-management',
@@ -58,7 +58,6 @@ export const pages = [
     icon: undefined,
     link: '/login-investor',
     component: <LoginPage user="investor" />,
->>>>>>> 17ddf38a3c62cb01d1e8b8f64412ca782eee03d0
   },
   {
     title: 'Landing Page',
@@ -66,5 +65,4 @@ export const pages = [
     link: '/',
     component: <LandingPage />,
   },
-  
 ];
