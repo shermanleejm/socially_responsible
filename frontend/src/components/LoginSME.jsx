@@ -114,6 +114,7 @@ export const LoginSME = () => {
               variant="filled"
               id="reddit-input"
               size="small"
+              type="password"
             />
           </Grid>
           <Grid item xs={12}>
