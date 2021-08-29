@@ -13,7 +13,7 @@ To start:
 4. Documentation hosted at `localhost:5000`
 
 You should be able to see the following page pop-up
-![](Backend.png)
+![](readme_images/Backend.png)
 
 ## Frontend
 
@@ -36,7 +36,8 @@ UEN can be anything.
 Password can be anything.
 
 You should see the following  
-![](Frontend.png)
+![](readme_images/Frontend.png)
+![](readme_images/mobile5.png)
 
 ## Contracts
 
