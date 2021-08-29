@@ -34,24 +34,30 @@ export const pages = [
     component: <AddFinancials />,
   },
   {
-    title: 'LoginSME',
+    title: undefined,
+    icon: undefined,
     link: '/loginSME',
-    component:<LoginSME />
+    component: <LoginSME />,
   },
   {
-    title: 'LoginInvestor',
+    title: undefined,
+    icon: undefined,
     link: '/loginInvestor',
-    component:<LoginInvestor />
+    component: <LoginInvestor />,
   },
   {
-    title: 'SignUp',
+    title: undefined,
+    icon: undefined,
     link: '/signup',
-    component:<SignUp />},
+    component: <SignUp />,
+  },
 
-    {
-      title: 'Investor Sign Up',
-      link: '/investorSignUp',
-      component:<InvestorSignUp/>},
+  {
+    title: undefined,
+    icon: undefined,
+    link: '/investorSignUp',
+    component: <InvestorSignUp />,
+  },
   {
     title: 'Loan Management',
     icon: <MonetizationOnIcon />,
@@ -59,8 +65,8 @@ export const pages = [
     component: <LoanManagement />,
   },
   // {
-  //   title: undefined,
-  //   icon: undefined,
+  // title: undefined,
+  // icon: undefined,
   //   link: '/login-sme',
   //   component: <LoginPage user="sme" />,
   // },
@@ -76,6 +82,4 @@ export const pages = [
     link: '/',
     component: <LandingPage />,
   },
-  
-  
 ];
