@@ -41,13 +41,18 @@ const useStyles = makeStyles((theme) => {
 
 const AmountField = (props) => {
   const classes = useStyles();
+  const { values, title, callback, keyName } = props;
   return (
     <div>
       <TextField
-        label={props.title}
-        value={props.values}
+        label={title}
+        value={values}
         onChange={(event) => {
-          props.callback(event.target.value, props.keyName);
+          if (keyName === undefined) {
+            callback(event.target.value);
+          } else {
+            callback(event.target.value, keyName);
+          }
         }}
         InputProps={{
           inputComponent: NumberFormatCustom,

@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 export function SideBar() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
-  console.log(pages);
+
   return (
     <div>
       <CssBaseline />
@@ -45,17 +45,19 @@ export function SideBar() {
       >
         <div>
           {pages.map((page) => {
-            return (
-              <ListItem
-                button
-                component={Link}
-                to={page.link}
-                onClick={() => setOpen(false)}
-              >
-                <ListItemIcon>{page.icon}</ListItemIcon>
-                <ListItemText primary={page.title} />
-              </ListItem>
-            );
+            if (page.title) {
+              return (
+                <ListItem
+                  button
+                  component={Link}
+                  to={page.link}
+                  onClick={() => setOpen(false)}
+                >
+                  <ListItemIcon>{page.icon}</ListItemIcon>
+                  <ListItemText primary={page.title} />
+                </ListItem>
+              );
+            }
           })}
         </div>
       </Drawer>

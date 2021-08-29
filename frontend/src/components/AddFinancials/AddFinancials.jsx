@@ -5,11 +5,17 @@ import PropTypes from 'prop-types';
 import AmountField from './AmountField';
 import TitleField from './TitleField';
 import DateField from './DateField';
+import axios from 'axios';
+import ErrorPage from '../ErrorPage';
 
 const useStyles = makeStyles((theme) => {
   return {
     heading: {
       marginBottom: '20px',
+    },
+    button: {
+      color: 'white',
+      backgroundColor: theme.palette.primary.main2,
     },
   };
 });
@@ -29,6 +35,47 @@ export const AddFinancials = () => {
       ...values,
       [keyName]: childData,
     });
+  }
+
+  const sendExpense = () => {
+    if (values.expenseAmount === 0 && values.expenseTitle === '') {
+      return;
+    }
+    axios.get(process.env.REACT_APP_API_LOCAL + 'add-expense', {
+      params: {
+        amount: values.expenseAmount,
+        name: values.expenseTitle,
+        uen: '12345', // TODO: retrieve from localstorage
+      },
+    });
+    setValues({
+      ...values,
+      expenseAmount: 0,
+      expenseTitle: '',
+      expenseDate: new Date(),
+    });
+  };
+
+  const sendRevenue = () => {
+    if (values.revenueAmount === 0) {
+      return;
+    }
+    axios.get(process.env.REACT_APP_API_LOCAL + 'add-revenue', {
+      params: {
+        amount: values.revenueAmount,
+        name: 'revenue',
+        uen: '12345', // TODO: retrieve from localstorage
+      },
+    });
+    setValues({
+      ...values,
+      revenueAmount: 0,
+      revenueDate: new Date(),
+    });
+  };
+
+  if (localStorage.getItem('userType') !== 'sme') {
+    return <ErrorPage type="Small Businesses" />;
   }
 
   return (
@@ -56,7 +103,12 @@ export const AddFinancials = () => {
             </Typography>
           </Grid>
           <Grid item>
-            <TitleField />
+            <TitleField
+              values={values.expenseTitle}
+              title="Name"
+              callback={callback}
+              keyName="expenseTitle"
+            />
           </Grid>
           <Grid item>
             <AmountField
@@ -74,7 +126,12 @@ export const AddFinancials = () => {
             />
           </Grid>
           <Grid item>
-            <Button variant="contained" color="primary" style={{ color: 'white' }}>
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.button}
+              onClick={() => sendExpense()}
+            >
               Submit Expense
             </Button>
           </Grid>
@@ -110,7 +167,11 @@ export const AddFinancials = () => {
             />
           </Grid>
           <Grid item>
-            <Button variant="contained" color="primary" style={{ color: 'white' }}>
+            <Button
+              variant="contained"
+              className={classes.button}
+              onClick={() => sendRevenue()}
+            >
               Submit Revenue
             </Button>
           </Grid>

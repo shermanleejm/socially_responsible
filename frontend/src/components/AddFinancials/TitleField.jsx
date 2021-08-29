@@ -9,15 +9,16 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
-const ExpenseField = (props) => {
+const TitleField = (props) => {
   const classes = useStyles();
+  const { values, callback, title, keyName, ...rest } = props;
   return (
     <div>
       <TextField
-        label="Title"
-        value={props.values}
+        label={title}
+        value={values}
         onChange={(event) => {
-          props.callback(event.target.value);
+          callback(event.target.value, keyName);
         }}
         variant="outlined"
         color="secondary"
@@ -27,4 +28,4 @@ const ExpenseField = (props) => {
   );
 };
 
-export default ExpenseField;
+export default TitleField;

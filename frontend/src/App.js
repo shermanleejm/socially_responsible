@@ -1,9 +1,10 @@
 import './App.css';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import Dashboard from './components/Dashboard.js';
+import Dashboard from './components/Dashboard';
 import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
 import { SideBar } from './components/SideBar';
 import { pages } from './components/Pages';
+require('dotenv').config();
 
 const theme = createTheme({
   palette: {
@@ -12,13 +13,13 @@ const theme = createTheme({
     },
     primary: {
       main: '#7B99C2',
+      main2: '#345582',
+      main3: '#9eb9de',
     },
     secondary: {
-      main: '#FFFFFF',
+      main: '#1E3F66',
     },
-    tertiary: {
-      main: '',
-    },
+    
   },
 });
 
