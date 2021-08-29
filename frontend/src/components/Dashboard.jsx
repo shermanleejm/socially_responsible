@@ -206,7 +206,7 @@ function Dashboard() {
     return (
       <div className={classes.loadingcontainer}>
         <Typography style={{ color: '#fff' }}>
-          Hang on, getting loan information
+          Hang on, getting your finances
         </Typography>
         <CircularProgress color="secondary" />
       </div>
@@ -248,7 +248,7 @@ function Dashboard() {
                 <Typography className={classes.cardheader}>
                   Revenue vs Expenses
                 </Typography>
-                <PieChart width={300} height={300}>
+                <PieChart width={400} height={300}>
                   <Pie
                     data={pieData}
                     color="#000000"
