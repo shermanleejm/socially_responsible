@@ -69,6 +69,21 @@ const theme = createTheme({
 
 export const LoginInvestor = () => {
     const classes = useStyles();
+
+    const [companyUEN, addCompanyUEN] = React.useState("");
+    const [password, addPassword] = React.useState(1);
+    
+    const handleCompanyUEN = (event) => {
+        addCompanyUEN(event.target.value);
+    }
+    const handlePassword = (event) => {
+        addPassword(event.target.value);
+    }
+
+    const signIn = () => {
+
+    }
+    
     return (
         
         
@@ -113,7 +128,8 @@ export const LoginInvestor = () => {
                             <Button
                                 fullWidth
                                 variant="contained"
-                                color="secondary"
+                                color="primary"
+                                onClick = {signIn}
                             >
                                 <div style={{ 'color': 'white' }}>Sign In</div>
                             </Button>

@@ -160,17 +160,70 @@ const theme = createTheme({
 });
 
 
+
 export const SignUp = () => {
     const classes = useStyles();
     const classes2 = useStyles2();
 
-    const [values, setValues] = React.useState({
-        password: '',
-        showPassword: false,
-    });
 
     const [homeOwnership, setHomeOwnership] = React.useState('Paying');
     const [income, setIncome] = React.useState('< 1 year');
+
+    const [companyName, addCompanyName] = React.useState("");
+
+    const [companyUEN, addCompanyUEN] = React.useState("");
+    const [annualIncome, addAnnualIncome] = React.useState(1);
+    const [password, addPassword] = React.useState("");
+    const [taxLiens, addTaxLiens] = React.useState(1);
+    const [openAccount, addOpenAccount] = React.useState(1);
+    const [creditHistory, addCreditHistory] = React.useState(1);
+    const [bankrupcies, addBankrupcies] = React.useState(1);
+    const [lastDelinquency, addLastDelinquency] = React.useState(1);
+    const [loanAmount, addLoanAmount] = React.useState(1);
+    const [openCredit, addOpenCredit] = React.useState(1);
+    const [creditBalance, addCreditBalance] = React.useState(1);
+    const [monthlyDebt, addMonthlyDebt] = React.useState(1);
+
+    const handleCompanyName = (event) => {
+        addCompanyName(event.target.value);
+    }
+    const handleCompanyUEN = (event) => {
+        addCompanyUEN(event.target.value);
+    }
+    const handlePassword = (event) => {
+        addPassword(event.target.value);
+    }
+    const handleAnnualIncome = (event) => {
+        addAnnualIncome(event.target.value);
+    }
+    const handleTaxLiens = (event) => {
+        addTaxLiens(event.target.value);
+    }
+    const handleOpenAccount = (event) => {
+        addOpenAccount(event.target.value);
+    }
+    const handleCreditHistory = (event) => {
+        addCreditHistory(event.target.value);
+    }
+    const handleBankrupcies = (event) => {
+        addBankrupcies(event.target.value);
+    }
+    const handleLastDelinquency = (event) => {
+        addLastDelinquency(event.target.value);
+    }
+    const handleLoanAmount = (event) => {
+        addLoanAmount(event.target.value);
+    }
+    const handleOpenCredit = (event) => {
+        addOpenCredit(event.target.value);
+    }
+    const handleCreditBalance = (event) => {
+        addCreditBalance(event.target.value);
+    }
+    const handleMonthlyDebt = (event) => {
+        addMonthlyDebt(event.target.value);
+    }
+
 
     const handleChangeHomeOwnership = (event) => {
         setHomeOwnership(event.target.value);
@@ -180,9 +233,15 @@ export const SignUp = () => {
         setIncome(event.target.value);
       };
 
-
+    const register = ()=>{
+        // this.setState({count : 1});
+        console.log(companyName);
+        console.log(companyUEN);
+        console.log(taxLiens);
+        console.log(openCredit);
+    
+    }
     return (
-
 
         <Grid container
             direction="column"
@@ -204,6 +263,7 @@ export const SignUp = () => {
                             fullWidth
                             label="Company Name"
                             className={classes.margin}
+                            onChange = {handleCompanyName}
                             variant="filled"
                             id="reddit-input"
                             size="small"
@@ -215,6 +275,7 @@ export const SignUp = () => {
                             fullWidth
                             label="Company UEN"
                             className={classes.margin}
+                            onChange = {handleCompanyUEN}
                             variant="filled"
                             id="reddit-input"
                             size="small"
@@ -229,6 +290,7 @@ export const SignUp = () => {
                         id="filled-password-input"
                         label="Password"
                         type="password"
+                        onChange = {handlePassword}
                         autoComplete="current-password"
                         variant="filled"
                         size="small"
@@ -267,6 +329,7 @@ export const SignUp = () => {
                              id="annualIncome"
                              label="Annual Income ($)"
                              type="number"
+                             onChange = {handleAnnualIncome}
                              InputLabelProps={{
                                shrink: true,
                              }}
@@ -304,6 +367,7 @@ export const SignUp = () => {
                             className={classes.margin}
                              id="taxLiens"
                              label="Tax Liens"
+                             onChange = {handleTaxLiens}
                              type="number"
                              InputLabelProps={{
                                shrink: true,
@@ -319,6 +383,7 @@ export const SignUp = () => {
                             className={classes.margin}
                              id="numberOfOpenAccounts"
                              label="Number of Open Account(s)"
+                             onChange = {handleOpenAccount}
                              type="number"
                              InputLabelProps={{
                                shrink: true,
@@ -334,6 +399,7 @@ export const SignUp = () => {
                             className={classes.margin}
                              id="creditHistoryYears"
                              label="Year(s) of credit history"
+                             onChange = {handleCreditHistory}
                              type="number"
                              InputLabelProps={{
                                shrink: true,
@@ -349,6 +415,7 @@ export const SignUp = () => {
                             className={classes.margin}
                              id="maximumOpenCredit"
                              label="Maximum Open Credit(s)"
+                             onChange = {handleOpenCredit}
                              type="number"
                              InputLabelProps={{
                                shrink: true,
@@ -364,6 +431,7 @@ export const SignUp = () => {
                             className={classes.margin}
                              id="bankruptcy"
                              label="Bankruptcies"
+                             onChange = {handleBankrupcies}
                              type="number"
                              InputLabelProps={{
                                shrink: true,
@@ -379,6 +447,7 @@ export const SignUp = () => {
                             className={classes.margin}
                              id="monthsSinceLastDelinquent"
                              label="Month(s) since last delinquency"
+                             onChange = {handleLastDelinquency}
                              type="number"
                              InputLabelProps={{
                                shrink: true,
@@ -394,6 +463,7 @@ export const SignUp = () => {
                             className={classes.margin}
                              id="currentLoanAmount"
                              label="Current Loan Amount ($)"
+                             onChange = {handleLoanAmount}
                              type="number"
                              InputLabelProps={{
                                shrink: true,
@@ -409,6 +479,7 @@ export const SignUp = () => {
                             className={classes.margin}
                              id="currentCreditBalance"
                              label="Current Credit Balance ($)"
+                             onChange = {handleCreditBalance}
                              type="number"
                              InputLabelProps={{
                                shrink: true,
@@ -424,6 +495,7 @@ export const SignUp = () => {
                             className={classes.margin}
                              id="monthlyDebt"
                              label="Monthly Debt"
+                             onChange = {handleMonthlyDebt}
                              type="number"
                              InputLabelProps={{
                                shrink: true,
@@ -439,7 +511,8 @@ export const SignUp = () => {
                         <Button
                         fullWidth
                             variant="contained"
-                            color="secondary"
+                            color="primary"
+                            onClick ={register}
                         >
                             <div style={{ 'color': 'white' }}>Register</div>
                         </Button>
