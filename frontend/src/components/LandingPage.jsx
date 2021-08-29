@@ -40,7 +40,7 @@ export const LandingPage = () => {
             <Button
               variant="contained"
               component={Link}
-              to={'/login-sme'}
+              to={'/loginSME'}
               className={classes.button}
             >
               Small Businesses
@@ -52,7 +52,7 @@ export const LandingPage = () => {
               color="secondary"
               className={classes.button}
               component={Link}
-              to={'/login-investor'}
+              to={'/loginInvestor'}
             >
               Investor
             </Button>

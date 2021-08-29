@@ -196,7 +196,7 @@ export const SignUp = () => {
                 >
                     <Grid item xs={12}  justifyContent="center" alignContent="center">
                     <h1 style={{ 'color': '#1E3F66' }}> <ThemeProvider theme={theme}>
-                            <Typography variant="h3">  <img src={logo} alt="logo" height="50px" />Start your journey with Einstein!</Typography>
+                            <Typography variant="h3">  <img src={logo} alt="logo" height="50px" />Start your journey with Edison as an SME!</Typography>
                         </ThemeProvider></h1>
                     </Grid>
                     <Grid item xs={12} >

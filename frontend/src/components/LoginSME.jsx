@@ -67,11 +67,11 @@ const theme = createTheme({
     },
 });
 
-export const Login = () => {
+export const LoginSME = () => {
     const classes = useStyles();
     return (
         
-        <Box borderRadius="50%">
+        
             <Grid container
                 direction="column"
                 justify="center"
@@ -79,17 +79,20 @@ export const Login = () => {
                 <div>
                     <Grid container
                         direction="column"
-                        alignItems="center" spacing={2} className = {classes.root}
+                         spacing={2} className = {classes.root}
                         style={{ padding: 30 }}
                     >
-                <img src={logo} alt="logo" height="300px" />
+                        <Grid item xs = {12}>
+                        <img src={logo} alt="logo" height="300px" />
                                 <h1 style={{ 'color': '#1E3F66' }}> <ThemeProvider theme={theme}>
-                                    <Typography variant="h3">Welcome to Einstein!</Typography>
+                                    <Typography variant="h3">Welcome to Edison as an SME!</Typography>
                                 </ThemeProvider></h1>
+                        </Grid>
+               
                         <Grid item xs={12} >
                             <RedditTextField
-                                style={{ 'width': '400px' }}
-                                label="Email"
+                               fullWidth
+                                label="UEN"
                                 className={classes.margin}
                                 variant="filled"
                                 id="reddit-input"
@@ -98,7 +101,7 @@ export const Login = () => {
                         </Grid>
                         <Grid item xs={12}>
                             <RedditTextField
-                                style={{ 'width': '400px' }}
+                                fullWidth
                                 label="Password"
                                 className={classes.margin}
                                 variant="filled"
@@ -108,7 +111,7 @@ export const Login = () => {
                         </Grid>
                         <Grid item xs={12}>
                             <Button
-                                style={{ 'width': '400px' }}
+                                fullWidth
                                 variant="contained"
                                 color="secondary"
                             >
@@ -125,7 +128,7 @@ export const Login = () => {
                                         component="button"
                                         variant="body2"
                                         component={Linking}
-                                        to={'/login'}
+                                        to={'/loginSME'}
                                     >
                                         <div style={{ 'color': '#1E3F66' }}><ThemeProvider theme={theme}>
                                             <Typography noWrap variant='subtitle23'>Forget your password?</Typography>
@@ -150,7 +153,7 @@ export const Login = () => {
                     </Grid>
                 </div>
             </Grid>
-        </Box>
+        
     );
 }
 
