@@ -222,7 +222,7 @@ export const SignUp = () => {
                         />
                     </Grid>
                    
-                    <Grid item xs={3} >
+                    <Grid item xs={6} >
                     <RedditTextField
                         fullWidth
                         className={classes.margin}
@@ -237,7 +237,7 @@ export const SignUp = () => {
                     </Grid>
                   
                     
-                    <Grid item xs={3} >
+                    <Grid item xs={6} >
                         <RedditTextField
                             fullWidth
                             label="Home Ownership"
@@ -260,7 +260,7 @@ export const SignUp = () => {
                         </RedditTextField>
                     </Grid>
 
-                    <Grid item xs={3}>
+                    <Grid item xs={6}>
                         <RedditTextField
                             fullWidth
                             className={classes.margin}
@@ -275,7 +275,7 @@ export const SignUp = () => {
                         />
                        
                     </Grid>
-                    <Grid item xs={3}>
+                    <Grid item xs={6}>
                     <RedditTextField
                             fullWidth
                             label="Years in current job (Years)"
@@ -298,7 +298,7 @@ export const SignUp = () => {
                         </RedditTextField>
                     </Grid>
 
-                    <Grid item xs={3}>
+                    <Grid item xs={6}>
                         <RedditTextField
                             fullWidth
                             className={classes.margin}
@@ -313,7 +313,7 @@ export const SignUp = () => {
                         />
                        
                     </Grid>
-                    <Grid item xs={3}>
+                    <Grid item xs={6}>
                         <RedditTextField
                             fullWidth
                             className={classes.margin}
@@ -328,7 +328,7 @@ export const SignUp = () => {
                         />
                        
                     </Grid>
-                    <Grid item xs={3}>
+                    <Grid item xs={6}>
                         <RedditTextField
                             fullWidth
                             className={classes.margin}
@@ -343,7 +343,7 @@ export const SignUp = () => {
                         />
                        
                     </Grid>
-                    <Grid item xs={3}>
+                    <Grid item xs={6}>
                         <RedditTextField
                             fullWidth
                             className={classes.margin}
@@ -358,7 +358,7 @@ export const SignUp = () => {
                         />
                        
                     </Grid>
-                    <Grid item xs={3}>
+                    <Grid item xs={6}>
                         <RedditTextField
                             fullWidth
                             className={classes.margin}
@@ -373,7 +373,7 @@ export const SignUp = () => {
                         />
                        
                     </Grid>
-                    <Grid item xs={3}>
+                    <Grid item xs={6}>
                     <RedditTextField
                             fullWidth
                             className={classes.margin}
@@ -388,7 +388,7 @@ export const SignUp = () => {
                         />
                        
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xs={6}>
                     <RedditTextField
                             fullWidth
                             className={classes.margin}
@@ -403,7 +403,7 @@ export const SignUp = () => {
                         />
                        
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xs={6}>
                     <RedditTextField
                             fullWidth
                             className={classes.margin}
@@ -418,7 +418,7 @@ export const SignUp = () => {
                         />
                        
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xs={6}>
                     <RedditTextField
                             fullWidth
                             className={classes.margin}
