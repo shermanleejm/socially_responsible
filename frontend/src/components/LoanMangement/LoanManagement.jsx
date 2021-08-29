@@ -87,8 +87,8 @@ const LoanManagement = () => {
   const [isLoading, setIsLoading] = React.useState();
 
   // TODO: take the following from localstorage
-  const [uen] = React.useState('198401412');
-  const [isCompany] = React.useState(true);
+  const [uen] = React.useState(localStorage.getItem('username'));
+  const [isCompany] = React.useState(localStorage.getItem('userType') === 'sme');
   const [name] = React.useState('Rick Grimes Pte Ltd');
   // const [isCompany] = React.useState(false);
   // const [name] = React.useState('BDS');
@@ -106,6 +106,8 @@ const LoanManagement = () => {
     fetchBanks();
   }, [isLoading]);
 
+  console.log(isCompany);
+
   return (
     <div>
       {isLoading ? (
@@ -120,7 +122,7 @@ const LoanManagement = () => {
           {isCompany ? (
             <Company uen={uen} companyName={name} banks={banks} loans={loans} />
           ) : (
-            <Bank bankName={name} loans={loans} />
+            <Bank bankName={uen} loans={loans} />
           )}
         </div>
       )}

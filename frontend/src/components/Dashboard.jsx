@@ -37,6 +37,7 @@ import {
   Tooltip,
   Legend,
 } from 'recharts';
+import ErrorPage from './ErrorPage';
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -196,6 +197,10 @@ function Dashboard() {
     }
     return null;
   };
+
+  if (localStorage.getItem('userType') !== 'sme') {
+    return <ErrorPage type="Small Businesses" />;
+  }
 
   if (revenues === null && expenses === null) {
     return (

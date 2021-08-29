@@ -74,7 +74,7 @@ const CompanyLogin = (props) => {
             <TextField
               className={classes.fields}
               color="secondary"
-              label="Username or email"
+              label={user === 'sme' ? 'UEN' : 'Username or Email'}
               value={details.username}
               onChange={(event) =>
                 setDetails({ ...details, username: event.target.value })
@@ -100,6 +100,10 @@ const CompanyLogin = (props) => {
               className={classes.button}
               component={Link}
               to={user === 'sme' ? '/dashboard' : '/leaderboard'}
+              onClick={() => {
+                localStorage.setItem('username', details.username);
+                localStorage.setItem('userType', user);
+              }}
             >
               {isLogin ? 'Login' : 'Register'}
             </Button>

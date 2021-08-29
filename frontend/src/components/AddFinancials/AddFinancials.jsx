@@ -6,6 +6,7 @@ import AmountField from './AmountField';
 import TitleField from './TitleField';
 import DateField from './DateField';
 import axios from 'axios';
+import ErrorPage from '../ErrorPage';
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -72,6 +73,10 @@ export const AddFinancials = () => {
       revenueDate: new Date(),
     });
   };
+
+  if (localStorage.getItem('userType') !== 'sme') {
+    return <ErrorPage type="Small Businesses" />;
+  }
 
   return (
     <div>
